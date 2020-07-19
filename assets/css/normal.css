@@ -1,0 +1,148 @@
+/* format of class: <site>-<function>-<area> */
+
+/* site: index.html */
+
+.index-search-area{
+	background-color:#00000000;
+	padding: 6px;
+	padding-top:8%;
+	color:white;
+}
+.index-button-panel{
+	height:200px;
+	width:100%;
+	font-size:30px;
+	color:white;
+	transition: 0.15s ease-in-out;
+}
+
+
+.index-button-panel:hover{
+	background: blueviolet;
+	text-decoration: none;
+}
+
+.index-button-panel:not(:hover){
+}
+
+.index-button-panel b{
+	font-size:3rem;	
+}
+.index-explore-background{
+	background: linear-gradient(180deg,rgba(255, 255, 255, 0.1) 0%, rgba(05, 10, 99, 0.64) 16%, rgba(51, 10, 99, 0.44) 84% , rgba(255, 255, 255, 0.1) 100%), url("../img/categories/panel-explore.jpg");
+}
+.index-post-background{
+	background: linear-gradient(180deg,rgba(255, 255, 255, 0.1) 0%, rgba(05, 10, 99, 0.64) 16%, rgba(51, 10, 99, 0.44) 84% , rgba(255, 255, 255, 0.1) 100%), url("../img/categories/panel-post.jpg");	
+}
+@media only screen and (max-width: 800px){
+.card-columns {
+    column-count: 4;
+}
+}
+
+@media only screen and (max-width: 600px){
+.card-columns {
+    column-count: 2;
+}
+}
+@media only screen and (max-width: 400px){
+.card-columns {
+    column-count: 2;
+}
+.jumbotron-fluid h1{
+	font-size:3rem;
+	transition-duration: 500ms;
+	transition-delay: 200ms;
+}
+}
+
+
+
+.jumbotron-fluid{
+	transition-delay: 200ms;
+	transition-duration: 500ms;
+  background: url("../img/background.jpg")  no-repeat center center;
+  background-color: rgba(0, 128, 0, 0.3);
+  background-size: cover;
+}
+
+.seperator{
+	margin-top:5%;
+	margin-bottom:5%;
+}
+
+.FitImage{
+	height: 100%;
+	width: 100%;
+}
+
+.MultiCarousel {
+	float: left;
+	overflow: hidden;
+	padding: 15px;
+	width: 100%;
+	position: relative;
+}
+
+.MultiCarousel .MultiCarousel-inner {
+	transition: 0.5s ease all;
+	float: left;
+}
+
+.MultiCarousel .MultiCarousel-inner .item {
+	float: left;
+}
+
+.MultiCarousel .MultiCarousel-inner .item>div {
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+	background: #f1f1f1;
+	color: #666;
+	box-shadow: 0 .2rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.MultiCarousel .leftLst,
+.MultiCarousel .rightLst {
+	position: absolute;
+	border-radius: 50%;
+	border: 0px;
+	top: calc(50% - 20px);
+}
+
+.MultiCarousel a:hover {
+	-webkit-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	transform: scale(1.1);
+	text-decoration: none;
+}
+.MultiCarousel a {
+	transition: 0.15s ease-in-out;
+}
+
+
+@keyframes raiseup {
+  from   { transform: translate(10,10);}
+to { transform: translate(10,10);
+}
+}
+.MultiCarousel .leftLst {
+	left: 3px;
+}
+
+.MultiCarousel .rightLst {
+	right: 3px;
+}
+
+.MultiCarousel .leftLst.over,
+.MultiCarousel .rightLst.over {
+	pointer-events: none;
+	background: #ccc;
+}
+
+.MultiCarousel-inner .lead{
+	overflow-x: hidden;
+	overflow-y: hidden;
+	color: black;
+	font-size: 1.1rem;
+}

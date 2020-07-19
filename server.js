@@ -1,0 +1,297 @@
+const express = require('express');
+var favicon = require('serve-favicon');
+const querystring = require('querystring');
+const fs = require('fs');
+
+const { parseMiRDBData } = require('./get_miRDB');
+const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
+const { makeRequest, readLines } = require('./helper');
+
+const app = express();
+const port = process.env.PORT || 3000;
+app.use(favicon("assets/img/favicon.png"));
+app.use(express.static(__dirname + '/assets/'));
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/html/index.html');
+})
+
+function getMiRDBResult(content,sequence){
+    //resolve from content
+    let pos = content.indexOf("fileName");
+    if (pos == -1)
+        return;
+    let fName = content.substring(pos+17,content.indexOf("/>",pos+17));
+    fName = fName.split('"')[0];
+    console.log("fileName: ",fName);
+    
+    const postData = querystring.stringify({
+        'fileName': fName,
+        '.submit': 'Retrieve Prediction Result',
+    });
+    let fullBody = "";
+    const dat = (chunk) => {
+        // console.log("got chunk");
+        fullBody += chunk;
+    };
+    const en = (chunk) => {
+        //process fullBody   
+        // console.log("got end");
+        parseMiRDBData(fullBody,sequence,getKEGGDataOffline);
+    };
+    const options = {
+        hostname: 'mirdb.org',
+        port: 80,
+        path: '/cgi-bin/custom.cgi',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(postData)
+        },
+        postData: postData,
+    };
+    makeRequest(options,dat,en);
+}
+
+function sequenceToResultId(seq){
+    return seq;
+}
+
+app.get('/seq/:sequence', (req, res) => {
+    let seq = req.params.sequence.toUpperCase();
+    const checkRes = readResultFile(sequenceToResultId(seq));
+    if (checkRes != null){
+        console.log(checkRes);
+        res.send(checkRes);
+        return;
+    }
+    let obj = {
+        sequence: seq,
+        path: "",
+    };
+    console.log("got sequence: ", seq);
+    //make request to miRDB
+    const postData = querystring.stringify({
+        'searchSpecies': 'hsa',
+        'subChoice': 'miRNA',
+        'miRsample': 'on',
+        'customSub': seq,
+        '.submit': 'Go',
+    });      
+    const en = (chunk) => {
+        console.log(`END BODY: ${chunk}`);
+    };
+
+    const options = {
+        hostname: 'mirdb.org',
+        port: 80,
+        path: '/cgi-bin/custom.cgi',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(postData)
+        },
+        postData: postData,
+    };
+
+    makeRequest(options,(chunk) => {
+        console.log("chunk",chunk);
+        getMiRDBResult(chunk,seq);
+    },en,true);
+    //send the result back to client
+    res.send(obj);
+})
+
+// --- INITIALIZATION PROCESS
+
+
+// const mimat = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});
+const allDataLines = readLines("rs_only.tsv").map((val) => {return val.split("\t");});
+
+function uniqueMimatNamePos(allDataLines){
+    curMimat = "";
+    let res = [];
+    for (let i = 0; i < allDataLines.length; i++) {
+        const ele = allDataLines[i];
+        if (ele[10] == curMimat)
+            continue;
+        curMimat = ele[10];
+        let obj = {mimat:ele[10],position:i,hsa:ele[11]};
+        res.push(obj);
+    }
+    return res;
+}
+
+const mimatPos = uniqueMimatNamePos(allDataLines);
+console.log("LOADED ",allDataLines.length," data line");
+const recommendMIR = mimatPos.map((a)=>{return a.mimat});
+const recommendHSA = mimatPos.map((a)=>{return a.hsa});
+console.log("RecommendMIR length:",recommendMIR.length,"- RecommendMIR length:",recommendHSA.length);
+
+
+// app.get('/miRNA/:mirna', (req, res) => {
+//     let i = 0;
+//     let mirna = req.params.mirna;
+//     for (i = 0; i < mimatPos.length; i++) {
+//         if (mimatPos[i].mimat == mirna || mimat[i][1] == mirna)
+//             break;
+//     }
+//     if (i >= mimat.length){
+//         return;
+//     }
+//     let alenC = mimat[i][2].toUpperCase();
+//     let alenG = mimat[i][2].toUpperCase();   
+//     let obj = {
+//         alenC: alenC,
+//         alenG: alenG
+//     };
+//     console.log("got mirna: ", req.params.mirna);
+//     //send back the id of the result
+//     res.send(obj);
+// })
+
+function readResultFile(resId){
+    let fileName = "./results/"+resId;
+    const check = fs.existsSync(fileName);
+    if (check){
+        let content = fs.readFileSync(fileName);
+        // console.log("content:", content);      
+        return content;
+    } else {       
+        return null;
+    }
+}
+
+app.get('/result/:resid', (req, res) => {
+    let fileName = "./results/"+req.params.resid;
+    // Check if the file is readable.
+    // console.log("checking file:", fileName);
+    const checkRes = readResultFile(req.params.resid);
+    // console.log(checkRes);
+    // const check = fs.existsSync(fileName);
+    // if (check){
+    //     let content = fs.readFileSync(fileName);  
+    //     console.log("content:", content);          
+    //     res.send(content);
+    // } else {       
+    //     res.send(null);
+    // }
+    res.send(checkRes);
+})
+
+function getFocusInMIRFile(mirId){
+    const fName = `./mirnadata/${mirId}/${mirId}.tsv`;
+    const check = fs.existsSync(fName);
+    if (check == false)
+        return null
+    let res = [];
+    const r = readLines(fName).map((val) => {return val.split("\t");});
+    r.splice(0,1);
+    r.forEach((val)=>{
+        if (val[2]!=".")
+            res.push(val);
+    })
+    return res;
+}
+
+app.get('/rsidToInfo/:rsId/mimat/:mimat/alterType/:altType', (req, res) => {
+    let rsId = req.params.rsId;
+    let mId = req.params.mimat;
+    let alterType = req.params.altType;
+    const path = `rsidToInfo/${rsId}/mimat/${mId}/alterType/${alterType}`;
+    let start = mimatPosInfo(mId); const end = start.endPosition;
+    start = start.basePosition;
+    let ind = -1;
+    for (let i = start; i < end; i++) {
+        const ele = allDataLines[i]
+        if (ele[2] == rsId && ele[3] == alterType[0] && ele[4] == alterType[1]){
+            ind = i; break
+        }
+    }
+    let obj = null;
+    if (ind != -1){
+        let alenC = allDataLines[ind][12].toUpperCase();
+        let alenG = allDataLines[ind][13].toUpperCase();
+        obj = {
+            alenC: alenC,
+            alenG: alenG
+        };
+    }
+    res.send(obj);
+})
+
+function mimatPosInfo(mimat){
+    let mIdPos = -1;
+    let arrayPos = -1;
+    //find the base pos of the mimat type
+    for (let i = 0; i < mimatPos.length; i++) {
+        const ele = mimatPos[i];
+        if (ele.mimat == mimat){
+            mIdPos = ele.position;
+            arrayPos = i;
+        }
+    }
+    const endPos = mimatPos[arrayPos+1].position;
+    return {basePosition: mIdPos,endPosition:endPos};
+}
+
+function suggestRsFromMIMAT(mimat){
+    // let rawRs = getFocusInMIRFile(mimat);
+    let result = [];
+    let mIdPos = mimatPosInfo(mimat);
+    const endPos = mIdPos.endPosition;
+    mIdPos = mIdPos.basePosition;
+    console.log("MID:",mimat,"mIdPost",mIdPos,"end",endPos);
+    if (mIdPos == -1)
+        return result;
+    for (let i = mIdPos; i < endPos; i++) {
+        const ele = allDataLines[i];
+        isTaking = true
+        let rObj = {rsId:ele[2]};
+        let altTypes = [];
+        altTypes.push({from:ele[3],to:ele[4]});
+        for (let j = i+1; j < endPos; j++) {
+            const ele2 = allDataLines[j];
+            if (ele[2] != ele2[2])
+                continue;
+            altTypes.push({from:ele2[3],to:ele2[4]});
+            i = j;
+        }
+        rObj.alternateTypes = altTypes;
+        // console.log(rObj);
+        result.push(rObj);
+    }
+    return result;
+}
+
+app.get('/suggestFromMIMAT/:mirID', (req, res) => {
+    let mId = req.params.mirID;
+    //check if mirseq exist
+    const rsidSuggest = suggestRsFromMIMAT(mId)
+    res.send({MIMAT: mId,rsidSuggest});
+    //return rs ids in mirseq
+})
+
+app.get('/suggestFromHSA/:mirID', (req, res) => {
+    let mId = req.params.mirID;
+    for (let i = 0; i < recommendHSA.length; i++) {
+        if (recommendHSA[i] == mId)
+            mId = recommendMIR[i];
+    }
+    if (mId == req.params.mirId){
+        res.send({rsidSuggest: null});
+        return;
+    }
+    const rsidSuggest = suggestRsFromMIMAT(mId);
+    res.send({MIMAT: mId,rsidSuggest});
+})
+
+app.get('/recommendMIR/:mir', (req, res) => {
+    res.send({recommendMIR});
+})
+
+app.get('/recommendHSA', (req, res) => {
+    res.send({recommendHSA});
+})
+
+app.listen(port, () => console.log(`SNP2Pathway app is listening at http://localhost:${port}`))

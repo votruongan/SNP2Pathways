@@ -1,0 +1,17 @@
+{
+  "name": "snp2pathway",
+  "version": "1.0.0",
+  "description": "packages for snp2pathway",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.5.1",
+    "jsdom": "^16.2.2",
+    "lodash": "^4.17.17",
+    "serve-favicon": "^2.5.0"
+  }
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNP2Pathway</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/fonts.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet" >
+    <!-- <link href="css/all.css" rel="stylesheet" > -->
+    <!-- <link href="css/normal.css" rel="stylesheet" > -->
+</head>
+
+<body>
+	<div class="px-5 py-3 row">
+		<div class="col-3 p-1">
+			<h2 class="text-center mb-3 mt-1"></h2>
+			<div class="shadow py-3">
+		<!-- choose input type -->
+				<!-- <div class="mb-3 row text-center px-3 ">
+					<div class="col-6 py-2 btn">
+						miRNA
+					</div>
+					<div class="w-100 col-6 py-2 btn-secondary">
+						Reference SNP ID
+					</div>
+				</div> -->
+		<!-- rs input -->	
+				<div class="row px-5 align-items-center mb-2 d-none">
+					<p class="p-0 col-1 m-0">rs</p>
+					<input type="text" class="p-0 col-11 form-control" id="rawRS"></input>
+				</div>
+		<!-- miRNA input -->
+				<p class="pl-2">Input:</p>
+				<div class="row px-4 align-items-center mb-2">
+					<select class="form-control col-4 text-right" name="cars" id="miRNAHeader">
+						<option value="hsa-miR-">hsa-miR-</option>
+						<option value="MIMAT">MIMAT</option>
+					  </select>
+					<input type="text" class="p-2 col-8 form-control" id="miRNA"></input>
+				</div>
+		<!-- choose RS ID -->
+				<div class="row px-4 d-flex align-items-center mb-2">
+					<p class="col-4 d-flex p-0 m-0 justify-content-end pr-3">Ref.SNP ID:</p>
+					<div class="p-0 col-8 w-100">
+						<input type="text" class="w-100 form-control" id="rsid"></input>
+						<div class="w-100 autocomplete_result"  style="display: none;" id="rsid_suggestions"></div>
+					</div>
+				</div>
+				
+		<!-- choose Alterrnate type --> 
+		<div class="row px-4 d-flex align-items-center mb-2">
+			<p class="col-4 d-flex p-0 m-0 justify-content-end pr-3">Alternate:</p>
+			<select class="form-control col-8 text-right" id="alterType">
+			  </select>
+		</div>
+		
+		<!-- Choose disease -->
+				
+					<p class="col-4 pl-2 mt-4 mr-0 pr-0">Diseases filter:</p>
+				<div class="justify-content-center d-flex mb-2">
+					<div class="form-control p-0"  style="width:90%; height: 256px; overflow: auto;">
+					<table class="table" id="pathway_filter_box">
+						  <tbody>				   
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Human immunodeficiency virus 1 infection</td>
+							</tr>
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Vulvar cancer</td>
+							</tr>
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Cervical cancer</td>
+							</tr>
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Endometrial cancer</td>
+							</tr>
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Ovarian cancer</td>
+							</tr>
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Fallopian tube cancer</td>
+							</tr>
+							<tr>
+							  <td><input type="checkbox" checked></input></td>
+							  <td>Choriocarcinoma</td>
+							</tr>
+						  </tbody>
+					</table></div>
+				</div>
+				<div class="justify-content-center d-flex mb-2">
+				<button class="mr-3 btn btn-info">Select all</button>
+				<button class="btn btn-info">Deselect all</button>
+				</div>
+				
+			</div>
+			<button class="btn btn-primary mt-3 col-12 text-center" id="processButton"><h4>Process</h4></button>
+		</div>
+	<div class="col-9 row ml-1">
+		<div class="col-6">
+			<div class="shadow pb-5 text-center" style="height: auto;">
+				<div class="btn-success py-2">
+					<h3>Reference RNA Sequence</h3>
+				</div>
+				<div class="row	 justify-content-center">	
+					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
+					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:32px;" id="alenC_display">
+					</div>
+				</div>
+				<div class="" >
+					<table class="table">
+						<thead>
+						  <tr>
+							<th scope="col">Score</th>
+							<th scope="col">Target</th>
+							<th scope="col">Pathways</th>
+						  </tr>
+						</thead>
+						<tbody id="alenC_result">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="shadow pb-5 text-center"  style="height: auto;">
+				<div class="btn-success py-2">
+					<h3>Alternate RNA Sequence</h3>
+				</div>
+				<div class="row	 justify-content-center">	
+					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
+					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:32px;" id="alenG_display">
+					</div>
+				</div>
+				<div class="">
+					<table class="table">
+						<thead>
+						  <tr>
+							<th scope="col">Score</th>
+							<th scope="col">Target</th>
+							<th scope="col">Pathways</th>
+						  </tr>
+						</thead>
+						<tbody id="alenG_result" >
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- <img class="d-none  h-50" src="./img/loading.gif" id="loadingPanel"></img> -->
+	</div>
+	</div>
+
+<footer>
+	<!-- <p>Một sản phẩm của PTUDW-17TN-Nhom16</p> -->
+</footer>
+<script defer src="js/suggest_input.js"></script>
+<script defer src="js/common.js"></script>
+<script defer src="js/index_script.js"></script>
+</body>
+</html>

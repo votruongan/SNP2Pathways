@@ -1,0 +1,169 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TUDO - Về chúng tôi</title>
+    <!-- CSS Styles -->
+    <link href="css/styles_item_info.css" rel="stylesheet">
+    <link href="css/all.css" rel="stylesheet">
+    <link href="css/fonts.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/normal.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script defer src="js/tudo-base.js"></script>
+
+</head>
+
+<body>
+    <!-- Navigation bar -->
+<nav class="FixedBar navbar navbar-light bg-light">
+	<a class="navbar-brand" href=".">
+	  <img src="img/logo.png" width="140" height="36" alt="">
+	</a>
+  <a href="javascript:void(0);" class="d-xs-block d-xl-none " id="toggleNavBar" onclick="extendNavBar()">
+    <h4 class="fa fa-bars"></h4>
+  </a>
+  <div class="navbar-brand d-none d-xl-block" href="#" id="moreNav">
+	<div class="navbar-brand">
+	<div class="d-flex justify-content-center h-100">
+	  <div class="searchbar">
+		<input class="search_input" type="text" name="" placeholder="Tìm kiếm...">
+		<a href="search" class="search_icon"><i class="fas fa-search"></i></a>
+	  </div>
+	</div>
+  </div>
+	  <a class="navbar-brand" href="post-item">
+		Cho thuê đồ
+	  </a>
+	  <a class="navbar-brand" href="about">
+		Tìm hiểu thêm
+	  </a>
+	  <a class="navbar-brand" href="signup">
+		Đăng ký
+	  </a>
+	  <a class="navbar-brand" href="login">
+		Đăng nhập
+	  </a>
+	  <a class="navbar-brand" href="#" onclick="location.href='profile'">
+			<img src="img/no_user.png" width="36" height="36" alt="">
+	  </a>
+  </div>
+</nav>
+    <!-- Introductory body -->
+			
+	<div class="container mt-5">
+		<div class="row justify-content-left">
+				<h2>Giới thiệu về TUDO:</h2>
+		</div>
+	 <div class="row container">
+		<div class="row">
+			<div class="col-xs-12 col-md-6 container my-md-5">
+				Bạn đang cần dùng thử một món đồ, hay đang có nhu cầu sử dụng một đồ vật nào đó tạm thời, nhưng lại không muốn tốn một khoản tiền quá lớn? Tất cả món đồ đều có thể thuê ở TUDO.
+			</div>
+			<div class="col-xs-12 col-md-6 container my-3">
+			<a href="search" class=" index-button-panel index-explore-background card shadow text-center border-0 text-white">
+				<div class="my-5 align-middle">
+					<b class="fas fa-map"></b>
+					<p>Khám phá các món đồ gần bạn</p>
+				</div>
+			</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 container my-md-5">
+				TUDO cũng là nơi sẽ giúp bạn kiếm thêm tiền từ những món đồ mà bạn đã mua mà không còn sử dụng thường xuyên nữa. Hoặc tìm cho bạn, những đơn vị cho thuê đồ chuyên nghiệp, những tập khách hàng mới.
+			</div>
+			<div class="col-xs-12 col-md-6 container my-3">
+			<a href="post-item" class="index-button-panel index-post-background card shadow text-center border-0 text-white">
+				<div class="my-5 align-middle">
+					<b class="fas fa-plus"></b>
+					<p>Tôi có đồ cho thuê</p>
+				</div>
+			</a>
+			</div>
+		</div>		
+	 </div>	
+    </div>
+    
+    <div class="container flex-box d-flex flex-column mt-5">
+		<div class="row justify-content-left mb-3">
+				<h2>Hướng dẫn sử dụng TUDO:</h2>
+		</div>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                            aria-expanded="true" aria-controls="collapseOne">
+                            Hướng dẫn đăng và quản lý món đồ cho thuê
+                        </button>
+
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
+                        of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                            aria-expanded="false" aria-controls="collapseTwo">
+                            Hướng dẫn thuê đồ
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
+                        of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree"
+                            aria-expanded="false" aria-controls="collapseThree">
+                            Hướng dẫn thanh toán bằng thẻ tín dụng hoặc chuyển khoản
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
+                        of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
