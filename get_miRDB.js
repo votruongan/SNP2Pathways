@@ -1,6 +1,7 @@
 const fs = require("fs");
 const jsdom = require("jsdom");
-const { CONNREFUSED } = require("dns");
+const querystring = require('querystring');
+const { makeRequest, readLines } = require('./helper');
 
 async function parseMiRDBData(html,sequence,elementCallback){
     const {JSDOM} = jsdom;
@@ -41,4 +42,42 @@ async function parseMiRDBData(html,sequence,elementCallback){
     return arr;
 }
 
-module.exports = {parseMiRDBData}
+
+function getMiRDBResult(content,sequence,elementCallback){
+    //resolve from content
+    let pos = content.indexOf("fileName");
+    if (pos == -1)
+        return;
+    let fName = content.substring(pos+17,content.indexOf("/>",pos+17));
+    fName = fName.split('"')[0];
+    console.log("fileName: ",fName);
+    
+    const postData = querystring.stringify({
+        'fileName': fName,
+        '.submit': 'Retrieve Prediction Result',
+    });
+    let fullBody = "";
+    const dat = (chunk) => {
+        // console.log("got chunk");
+        fullBody += chunk;
+    };
+    const en = (chunk) => {
+        //process fullBody   
+        // console.log("got end");
+        parseMiRDBData(fullBody,sequence,elementCallback);
+    };
+    const options = {
+        hostname: 'mirdb.org',
+        port: 80,
+        path: '/cgi-bin/custom.cgi',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(postData)
+        },
+        postData: postData,
+    };
+    makeRequest(options,dat,en);
+}
+
+module.exports = {parseMiRDBData, getMiRDBResult}

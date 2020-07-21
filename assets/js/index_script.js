@@ -61,35 +61,24 @@ function makePathwayCheck(pathName){
     var a = [];
 }
 
-function setAlenC(){
-    let content = this.responseText;
+function setAlenResult(responseText,resultDisplayer,resHandlerIndex){
+    clearInterval(alenResHandler[resHandlerIndex]);
+    let content = responseText;
     if (content == "null" || content == "")
         return;
-    clearInterval(alenResHandler[0]);
     let data = JSON.parse(content);
     for (let i = 0; i < data.length; i++) {
-        // if (data[i].diseases == null || data[i].diseases.length == 0)
-        //     continue;
         var r = makeRow(data[i]);
-        alenC_result.appendChild(r);                
+        resultDisplayer.appendChild(r);                
     }
-    alenResHandler[0]= null;
-    // loadingPanel.classList.remove("d-block");
-    // loadingPanel.classList.add("d-none");
+    alenResHandler[resHandlerIndex]= null;
+}
+
+function setAlenC(){
+    setAlenResult(this.responseText,alenC_result,0);
 }
 function setAlenG(){
-    let content = this.responseText;
-    if (content == "null" || content == "")
-        return;
-    clearInterval(alenResHandler[1]);
-    let data = JSON.parse(content);
-    for (let i = 0; i < data.length; i++) {
-        var r = makeRow(data[i]);
-        alenG_result.appendChild(r);                
-    }
-    alenResHandler[1]= null;
-    // loadingPanel.classList.remove("d-block");
-    // loadingPanel.classList.add("d-none");
+    setAlenResult(this.responseText,alenG_result,1);
 }
 
 function rsReturnProcessor(){
@@ -161,3 +150,16 @@ rsid.addEventListener("focusout",suggestAlternateFromRs);
 miRNA.addEventListener("focusout",sendMIR);
 processButton.addEventListener("click",sendRS);
 
+function fillPathwayFilter(){
+    const obj = JSON.stringify(this.responseText);
+    const arr = obj.pathwayFilter;
+    arr.forEach(val=>{
+        
+    })
+}
+
+function init(){
+    let xhr = makeXHR('pathway_filter');
+    xhr.addEventListener("load", fillPathwayFilter);
+    xhr.send();
+}

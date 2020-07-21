@@ -78,11 +78,11 @@ async function getKEGGData(geneId){
 async function getKEGGDataOffline(geneId){
     return new Promise((resolve,reject)=>{
         let res = [];
-        console.log("getKEGGDataOffline", geneId);
+        // console.log("getKEGGDataOffline", geneId);
         const h = hashTheGeneId(geneId);
         if (h == undefined || hashedMap[h] == undefined)
             resolve(res);
-        console.log("KEGG Offline:",geneId,h);
+        // console.log("KEGG Offline:",geneId,h);
         for (let i = 0; i < hashedMap[h].length; i++) {
             const ele = hashedMap[h][i];
             if (ele[0] == geneId){

@@ -3,7 +3,7 @@ var favicon = require('serve-favicon');
 const querystring = require('querystring');
 const fs = require('fs');
 
-const { parseMiRDBData } = require('./get_miRDB');
+const { parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { makeRequest, readLines } = require('./helper');
 
@@ -16,42 +16,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/html/index.html');
 })
 
-function getMiRDBResult(content,sequence){
-    //resolve from content
-    let pos = content.indexOf("fileName");
-    if (pos == -1)
-        return;
-    let fName = content.substring(pos+17,content.indexOf("/>",pos+17));
-    fName = fName.split('"')[0];
-    console.log("fileName: ",fName);
-    
-    const postData = querystring.stringify({
-        'fileName': fName,
-        '.submit': 'Retrieve Prediction Result',
-    });
-    let fullBody = "";
-    const dat = (chunk) => {
-        // console.log("got chunk");
-        fullBody += chunk;
-    };
-    const en = (chunk) => {
-        //process fullBody   
-        // console.log("got end");
-        parseMiRDBData(fullBody,sequence,getKEGGDataOffline);
-    };
-    const options = {
-        hostname: 'mirdb.org',
-        port: 80,
-        path: '/cgi-bin/custom.cgi',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(postData)
-        },
-        postData: postData,
-    };
-    makeRequest(options,dat,en);
-}
+
 
 function sequenceToResultId(seq){
     return seq;
@@ -96,7 +61,7 @@ app.get('/seq/:sequence', (req, res) => {
 
     makeRequest(options,(chunk) => {
         console.log("chunk",chunk);
-        getMiRDBResult(chunk,seq);
+        getMiRDBResult(chunk,seq,getKEGGDataOffline);
     },en,true);
     //send the result back to client
     res.send(obj);
@@ -107,6 +72,7 @@ app.get('/seq/:sequence', (req, res) => {
 
 // const mimat = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});
 const allDataLines = readLines("rs_only.tsv").map((val) => {return val.split("\t");});
+const pathwayFilter = readLines("pathway_filter.txt");
 
 function uniqueMimatNamePos(allDataLines){
     curMimat = "";
@@ -284,6 +250,10 @@ app.get('/suggestFromHSA/:mirID', (req, res) => {
     }
     const rsidSuggest = suggestRsFromMIMAT(mId);
     res.send({MIMAT: mId,rsidSuggest});
+})
+
+app.get('/pathway_filter', (req, res) => {
+    res.send({pathwayFilter});
 })
 
 app.get('/recommendMIR/:mir', (req, res) => {
