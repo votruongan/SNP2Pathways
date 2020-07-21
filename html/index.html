@@ -58,7 +58,7 @@
 		
 		<!-- Choose disease -->
 				
-					<p class="col-4 pl-2 mt-4 mr-0 pr-0">Diseases filter:</p>
+					<p class="col-4 pl-2 mt-4 mr-0 pr-0">Pathways filter:</p>
 				<div class="justify-content-center d-flex mb-2">
 					<div class="form-control p-0"  style="width:90%; height: 256px; overflow: auto;">
 					<table class="table" id="pathway_filter_box">
@@ -67,53 +67,53 @@
 							  <td><input type="checkbox" checked></input></td>
 							  <td>Human immunodeficiency virus 1 infection</td>
 							</tr>
-							<tr>
-							  <td><input type="checkbox" checked></input></td>
-							  <td>Vulvar cancer</td>
-							</tr>
-							<tr>
-							  <td><input type="checkbox" checked></input></td>
-							  <td>Cervical cancer</td>
-							</tr>
-							<tr>
-							  <td><input type="checkbox" checked></input></td>
-							  <td>Endometrial cancer</td>
-							</tr>
-							<tr>
-							  <td><input type="checkbox" checked></input></td>
-							  <td>Ovarian cancer</td>
-							</tr>
-							<tr>
-							  <td><input type="checkbox" checked></input></td>
-							  <td>Fallopian tube cancer</td>
-							</tr>
-							<tr>
-							  <td><input type="checkbox" checked></input></td>
-							  <td>Choriocarcinoma</td>
-							</tr>
 						  </tbody>
 					</table></div>
 				</div>
 				<div class="justify-content-center d-flex mb-2">
-				<button class="mr-3 btn btn-info">Select all</button>
-				<button class="btn btn-info">Deselect all</button>
+					<button class="mr-1 btn btn-info" id="deselectAll_pathway">Deselect all</button>
+					<button class="mr-3 btn btn-info" id="selectAll_pathway">Select all</button>
+					<button class="btn btn-success" id="apply_pathway_filter">Apply filter</button>
 				</div>
 				
 			</div>
 			<button class="btn btn-primary mt-3 col-12 text-center" id="processButton"><h4>Process</h4></button>
 		</div>
 	<div class="col-9 row ml-1">
+		<div class="row col-12  mb-2">
+		<div class="col-12">
+			<div class="shadow pb-2 text-center" style="height: auto;">
+				<div class="btn-success py-0">
+					<h4>Common Target</h4>
+				</div>
+				<div  class="overflow-auto" style="height:250px;" >
+					<table class="table">
+						<thead>
+						  <tr>
+							<th scope="col">Score</th>
+							<th scope="col">Target</th>
+							<th scope="col">Pathways</th>
+						  </tr>
+						</thead>
+						<tbody id="common_result_display">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="row col-12">
 		<div class="col-6">
-			<div class="shadow pb-5 text-center" style="height: auto;">
-				<div class="btn-success py-2">
-					<h3>Reference RNA Sequence</h3>
+			<div class="shadow pb-2 text-center" style="height: auto;">
+				<div class="btn-success py-0">
+					<h4>Reference RNA Sequence</h4>
 				</div>
 				<div class="row	 justify-content-center">	
 					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
-					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:32px;" id="alenC_display">
+					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:1rem;" id="alenC_display">
 					</div>
 				</div>
-				<div class="" >
+				<div  class="overflow-auto" style="height:300px;" >
 					<table class="table">
 						<thead>
 						  <tr>
@@ -129,16 +129,16 @@
 			</div>
 		</div>
 		<div class="col-6">
-			<div class="shadow pb-5 text-center"  style="height: auto;">
-				<div class="btn-success py-2">
-					<h3>Alternate RNA Sequence</h3>
+			<div class="shadow pb-2 text-center"  style="height: auto;">
+				<div class="btn-success py-0">
+					<h4>Alternate RNA Sequence</h4>
 				</div>
 				<div class="row	 justify-content-center">	
 					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
-					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:32px;" id="alenG_display">
+					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:1rem;" id="alenG_display">
 					</div>
 				</div>
-				<div class="">
+				<div  class="overflow-auto" style="height:300px;" >
 					<table class="table">
 						<thead>
 						  <tr>
@@ -147,15 +147,16 @@
 							<th scope="col">Pathways</th>
 						  </tr>
 						</thead>
-						<tbody id="alenG_result" >
+						<tbody id="alenG_result">
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
+		</div>
 		<!-- <img class="d-none  h-50" src="./img/loading.gif" id="loadingPanel"></img> -->
 	</div>
-	</div>
+</div>
 
 <footer>
 	<!-- <p>Một sản phẩm của PTUDW-17TN-Nhom16</p> -->

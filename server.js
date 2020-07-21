@@ -207,7 +207,7 @@ function suggestRsFromMIMAT(mimat){
     let mIdPos = mimatPosInfo(mimat);
     const endPos = mIdPos.endPosition;
     mIdPos = mIdPos.basePosition;
-    console.log("MID:",mimat,"mIdPost",mIdPos,"end",endPos);
+    // console.log("MID:",mimat,"mIdPost",mIdPos,"end",endPos);
     if (mIdPos == -1)
         return result;
     for (let i = mIdPos; i < endPos; i++) {
