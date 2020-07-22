@@ -168,7 +168,6 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     tableDisplayResult(alenC_result,result_array[0]);
     tableDisplayResult(alenG_result,result_array[1]);
     tableDisplayResult(common_result_display,common_result);
-    setLoadingPanel(false);
     if (result_array[0].length + result_array[1].length == 0){
         setGrandParentHeight(common_result_display,"450px");
     }
@@ -176,6 +175,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
         setGrandParentHeight(alenG_result,"450px");
         setGrandParentHeight(alenC_result,"450px");
     }
+    setLoadingPanel(false);
 }
 
 function setAlenC(data,isbegin=false){
@@ -260,7 +260,7 @@ async function sendRS(){
 
 function applyPathwayFilter(display=true){
     pathway_filter = [];
-    setLoadingPanel(display);
+    setLoadingPanel(true);
     for (let i = 0; i < all_pathway_filter.length; i++) {
         const res = getEle("path_select_"+i).checked;
         if (res == true){//(res == false || res == null){

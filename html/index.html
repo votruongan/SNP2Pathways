@@ -32,7 +32,7 @@
 					<input type="text" class="p-0 col-11 form-control" id="rawRS"></input>
 				</div>
 		<!-- miRNA input -->
-				<p class="pl-2">Input:</p>
+				<!-- <p class="pl-2">Input:</p> -->
 				<div class="row px-4 align-items-center mb-2">
 					<select class="form-control col-4 text-right" name="cars" id="miRNAHeader">
 						<option value="hsa-miR-">hsa-miR-</option>
@@ -57,7 +57,7 @@
 		</div>
 		
 		<!-- Choose disease -->
-				<div class="row align-items-center">
+				<div class="row align-items-center mt-3">
 					<p class="col-5 pl-4 mt-4 mr-0 pr-0">Pathways filter:</p>
 					<input class="col-6 form-control" id="filter_filter"></input>
 				</div>
@@ -82,9 +82,11 @@
 			<button class="btn btn-primary mt-3 col-12 text-center" id="processButton"><h4>Process</h4></button>
 		</div>
 	<div class="col-9 row ml-1">
-		<div class="overlay d-none justify-content-center align-items-center pl-5"  id="loadingPanel">
-			<div class="spinner-grow w-25 h-50 text-primary"  role="status">
-				<span class="sr-only">Loading...</span>
+		<div class="overlay d-none justify-content-center align-items-center pb-5 mt-0"  id="loadingPanel">
+			<div class="col-3"></div>
+			<div class="spinner-border text-info" style="width: 16rem; height: 16rem;"  role="status">
+				<!-- <img src="./img/plasmide.png"></img> -->
+				<span class="sr-only"></span>
 		  	</div>
 		</div>
 		<div class="row col-12  mb-2">
@@ -107,6 +109,9 @@
 					</table>
 				</div>
 			</div>
+		</div>
+		<div class="row col-12 p-0 m-0 px-3" style="height: 8px; z-index: 100;">
+			<button class="btn btn-light w-100" style="font-size: 0.5rem;" id="change_height_drag"></button>
 		</div>
 		</div>
 		<div class="row col-12">
