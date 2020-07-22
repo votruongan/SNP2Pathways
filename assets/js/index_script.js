@@ -171,7 +171,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     if (result_array[0].length + result_array[1].length == 0){
         setGrandParentHeight(common_result_display,"450px");
     }
-    if (common_result[0].length == 0){
+    if (common_result.length == 0){
         setGrandParentHeight(alenG_result,"450px");
         setGrandParentHeight(alenC_result,"450px");
     }

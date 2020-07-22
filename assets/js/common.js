@@ -34,7 +34,7 @@ change_height_drag.addEventListener('mousedown', e => {
 
 change_height_drag.addEventListener('mousemove', e => {
   if (isDrawing === true) {
-    drawLine(x, y, e.offsetX, e.offsetY);
+    changeHeight(x, y, e.offsetX, e.offsetY);
     x = e.offsetX;
     y = e.offsetY;
   }
@@ -42,7 +42,7 @@ change_height_drag.addEventListener('mousemove', e => {
 
 window.addEventListener('mouseup', e => {
   if (isDrawing === true) {
-    // drawLine(x, y, e.offsetX, e.offsetY);
+    // changeHeight(x, y, e.offsetX, e.offsetY);
     // x = 0;
     // y = 0;
     isDrawing = false;
@@ -55,7 +55,7 @@ function takeGrandParentHeightPx(ele){
     return parseInt(raw);
 }
 
-function drawLine(x1, y1, x2, y2) {
+function changeHeight(x1, y1, x2, y2) {
     const dy = (y2 - y1)*20;
     console.log(dy);
     setGrandParentHeight(common_result_display,(takeGrandParentHeightPx(common_result_display) + dy) + "px");
