@@ -52,11 +52,16 @@ function makeElement(type, data, link=null, style=null,keepRawData=false){
     return r;
 }
 
+function makeDiseaseDisplay(val){
+    return val.name+` <a target="_blank" href="${pathway_link_prefix}${val.id}">[${val.id}]</a>`;
+}
+
 function makeResultRow(data){
     var mainNode = document.createElement("tr");
     mainNode.appendChild(makeElement("td",data.score));
     mainNode.appendChild(makeElement("td",data.gene, data.gLink));
-    mainNode.appendChild(makeElement("td",data.diseases.map(val=>val.name).join("\n"),null,"text-align: left;",true));
+    const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
+    mainNode.appendChild(makeElement("td",ds,null,"text-align: left;"));
     return mainNode;
 }
 
@@ -65,12 +70,12 @@ function setGrandParentHeight(target,value){
 }
 
 function tableDisplayResult(tableId,arr){
+    tableId.innerText="";
     if (arr.length == 0){
         setGrandParentHeight(tableId,"100px");
         tableId.innerHTML = "<tr><td></td><td>No result found</td></tr>";
         return;
     }
-    console.log(arr);
     arr = filterDiseasesInArray(arr);
     console.log(arr);
     for (let i = 0; i < arr.length; i++) {
@@ -82,17 +87,18 @@ function tableDisplayResult(tableId,arr){
 function filterDiseasesInArray(objArray){
     let data = objArray;
     for (let i = 0; i < data.length; i++) {
-        const element = data[i];
-        let j = 0;
-        if (data.diseases == undefined)
+        const ele = data[i];
+        if (ele.diseases == undefined)
             continue;
-        while(j < data.diseases.length){
-            const dele = data.diseases[j++];
-            if (pathway_filter.includes(dele.name)){
-                data.diseases.splice(j,1);
-                j--;
+        let j = 0;
+        while(j < ele.diseases.length){
+            const dele = ele.diseases[j++];
+            if (!pathway_filter.includes(dele.name)){
+                console.log(dele.name)
+                ele.diseases.splice(--j,1);
+                console.log(ele.diseases)
             }
-        }         
+        }    
     }
     return data;
 }
@@ -113,6 +119,16 @@ function parseDiseasesInAll(arr){
     return arr;
 }
 
+function setLoadingPanel(val){
+    if (val){
+        loadingPanel.classList.remove("d-none");
+        loadingPanel.classList.add("d-flex");
+        return;
+    }
+    loadingPanel.classList.remove("d-flex");
+    loadingPanel.classList.add("d-none");
+}
+
 function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     const oppositeIndex = (currentIndex == 1)?(0):(1);
     clearInterval(alenResHandler[currentIndex]);
@@ -122,10 +138,11 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
         return;
     let data = JSON.parse(content);
     console.log(data);
-    if (parseDiseases)
+    if (parseDiseases){
         data = parseDiseasesInAll(data);
-    raw_result[currentIndex] = JSON.parse(JSON.stringify(data));
-    console.log(raw_result[currentIndex]);
+        raw_result[currentIndex] = JSON.parse(JSON.stringify(data));
+        console.log(raw_result[currentIndex]);
+    }
     if (data.length > 0)
         resultDisplayer.innerText = "";
     if (result_array[oppositeIndex].length <= 0){
@@ -150,6 +167,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     tableDisplayResult(alenC_result,result_array[0]);
     tableDisplayResult(alenG_result,result_array[1]);
     tableDisplayResult(common_result_display,common_result);
+    setLoadingPanel(false);
     if (result_array[0].length + result_array[1].length == 0){
         setGrandParentHeight(common_result_display,"450px");
     }
@@ -174,6 +192,7 @@ function rsReturnProcessor(){
     alenG_result.textContent = '';
     alenResHandler.forEach(ele => ele && clearInterval(ele));
     alenResHandler = [null,null];
+    applyPathwayFilter(false);
     toggleHandler("C", obj.alenC);
     toggleHandler("G", obj.alenG);
 }
@@ -232,18 +251,23 @@ async function sendRS(){
     const path = `rsidToInfo/${rscode}/mimat/${mimatCode}/alterType/${alterType.value}`;
     // console.log(path);
     let xhr = makeXHR(path);
+    setLoadingPanel(true);
     xhr.addEventListener("load", rsReturnProcessor);
     xhr.send();
     console.log("sent rs request", path);
 }
 
-function applyPathwayFilter(){
+function applyPathwayFilter(display=true){
     pathway_filter = [];
+    setLoadingPanel(display);
     for (let i = 0; i < all_pathway_filter.length; i++) {
         const res = getEle("path_select_"+i).checked;
-        if (res == false || res == null){
+        if (res == true){//(res == false || res == null){
             pathway_filter.push(all_pathway_filter[i]); 
         }
+    }
+    if (display == false){
+        return;
     }
     if (raw_result[0].length > 0)
         setAlenC(JSON.stringify(raw_result[0]));
@@ -256,7 +280,7 @@ function makePathwayCheck(pName,index){
     return makeElement('tr',temp);
 }
 
-function fillPathwayFilter(){
+function initPathwayFilter(){
     const obj = JSON.parse(this.responseText);
     all_pathway_filter = obj.pathwayFilter;
     pathway_filter_box.innerText = '';
@@ -275,7 +299,7 @@ function init(){
     setObjectActive(rsid,false);
     setObjectActive(alterType,false);
     let xhr = makeXHR('pathway_filter');
-    xhr.addEventListener("load", fillPathwayFilter);
+    xhr.addEventListener("load", initPathwayFilter);
     xhr.send();
 }
 
@@ -284,12 +308,17 @@ init();
 function toggleAllPathwayFilter(val){
     if (val){
         for (let i = 0; i < all_pathway_filter.length; i++) {
-            getEle("path_select_"+i).setAttribute("checked","");
+            const ele = getEle("path_select_"+i);
+            if (ele.checked)
+                continue;
+            ele.click();
         }
         return;
     }
     for (let i = 0; i < all_pathway_filter.length; i++) {
-        getEle("path_select_"+i).removeAttribute("checked");
+        const ele = getEle("path_select_"+i);
+        if (ele.checked)
+            ele.click();
     }
 }
 
