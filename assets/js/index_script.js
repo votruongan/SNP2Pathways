@@ -76,6 +76,7 @@ function tableDisplayResult(tableId,arr){
         tableId.innerHTML = "<tr><td></td><td>No result found</td></tr>";
         return;
     }
+    setGrandParentHeight(tableId,"290px");
     arr = filterDiseasesInArray(arr);
     console.log(arr);
     for (let i = 0; i < arr.length; i++) {
