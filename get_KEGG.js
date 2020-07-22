@@ -86,7 +86,7 @@ async function getKEGGDataOffline(geneId){
         for (let i = 0; i < hashedMap[h].length; i++) {
             const ele = hashedMap[h][i];
             if (ele[0] == geneId){
-                console.log(ele);
+                // console.log(ele);
                 res = ele[5].split('&');
                 break;
             }

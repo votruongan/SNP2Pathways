@@ -17,7 +17,7 @@ function toggleHandler(ch,seq){
     if(alenResHandler[index] == null){
         alenResHandler[index] = setInterval(()=>{
             let sxhr = makeXHR("result",seq);
-            // console.log(">>>",ch,xhr);
+            console.log(">>>",ch,xhr);
             if (ch == "C")
                 sxhr.addEventListener("load",function(){setAlenC(this.responseText,true)});
             else
@@ -179,16 +179,27 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
 }
 
 function setAlenC(data,isbegin=false){
+    console.log("setAlenC",data);
     setAlenResult(data,alenG_result,0,parseDiseases=isbegin);
 }
 function setAlenG(data,isbegin=false){
+    console.log("setAlenG",data);
     setAlenResult(data,alenG_result,1,parseDiseases=isbegin);
 }
 
 function rsReturnProcessor(){
     let obj = JSON.parse(this.responseText);
-    alenC_display.innerHTML = obj.alenC;
-    alenG_display.innerHTML = obj.alenG;
+    let realObj = JSON.parse(this.responseText);
+    console.log(obj);
+    for (let i = 0; i < obj.alenC.length; i++) {
+        if (obj.alenC[i] != obj.alenG[i]){
+            console.log("different in index ",i);
+            realObj.alenC = obj.alenC.slice(0,(i-1 < 0)?(0):(i-1)) + `<b>${obj.alenC[i]}</b>` + obj.alenC.slice(i+1);
+            realObj.alenG = obj.alenG.slice(0,(i-1 < 0)?(0):(i-1)) + `<b>${obj.alenG[i]}</b>` + obj.alenG.slice(i+1);
+        }
+    }
+    alenC_display.innerHTML = realObj.alenC;
+    alenG_display.innerHTML = realObj.alenG;
     alenC_result.textContent = '';
     alenG_result.textContent = '';
     alenResHandler.forEach(ele => ele && clearInterval(ele));

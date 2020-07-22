@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const { parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
-const { makeRequest, readLines } = require('./helper');
+const { makeRequest, readLines, sleep } = require('./helper');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,9 +22,9 @@ function sequenceToResultId(seq){
     return seq;
 }
 
-app.get('/seq/:sequence', (req, res) => {
+app.get('/seq/:sequence', async (req, res) => {
     let seq = req.params.sequence.toUpperCase();
-    const checkRes = readResultFile(sequenceToResultId(seq));
+    const checkRes = await readResultFile(sequenceToResultId(seq));
     if (checkRes != null){
         console.log(checkRes);
         res.send(checkRes);
@@ -115,12 +115,32 @@ console.log("RecommendMIR length:",recommendMIR.length,"- RecommendMIR length:",
 //     //send back the id of the result
 //     res.send(obj);
 // })
-
-function readResultFile(resId){
+  
+async function readResultFile(resId){
     let fileName = "./results/"+resId;
-    const check = fs.existsSync(fileName);
+    console.log("checking file:",fileName);
+    let promise = new Promise((resolve, reject) => {
+        // Check if the file exists in the current directory.
+        fs.access(fileName, fs.constants.F_OK, (err) => {
+            if (err){
+                console.log(fileName,"not existing");
+                resolve(null);
+            }
+            resolve(true);
+        });
+    });
+    const check = await promise;
     if (check){
-        let content = fs.readFileSync(fileName);
+        //Ensure that file is written
+        await sleep(1000);
+        promise = new Promise((resolve, reject) => {
+            // Read content in file.
+            fs.readFile(fileName,(err, data) => {
+                if (err) resolve(null);
+                resolve(data);
+            })
+        });
+        let content = await promise;
         // console.log("content:", content);      
         return content;
     } else {       
@@ -128,11 +148,11 @@ function readResultFile(resId){
     }
 }
 
-app.get('/result/:resid', (req, res) => {
+app.get('/result/:resid', async (req, res) => {
     let fileName = "./results/"+req.params.resid;
     // Check if the file is readable.
     // console.log("checking file:", fileName);
-    const checkRes = readResultFile(req.params.resid);
+    const checkRes = await readResultFile(req.params.resid);
     // console.log(checkRes);
     // const check = fs.existsSync(fileName);
     // if (check){

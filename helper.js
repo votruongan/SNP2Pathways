@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const _ = require('lodash');
 
-let dirtyProxyCount = 0; 
+let dirtyProxyCount = 8; 
 
 function readLines(path){
     return fs.readFileSync(path, "utf-8").split("\n").map((val) => { return val.split("\r")[0];});
@@ -39,7 +39,13 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
         console.log(`IP: ${prox[0]}STATUS: ${res.statusCode}`);
         // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
         res.setEncoding('utf8');
-        res.on('data', dataCallback);
+        res.on('data', (chunk)=>{
+            if (chunk.includes("Warning:")){
+                console.error(`Warning from site detected`);
+                throw new Error('Warning from site detected');
+            }
+            dataCallback(chunk);
+        });
         res.on('end', endCallback);
     });
 
@@ -52,4 +58,10 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
     myReq.end();
 }
 
-module.exports = { makeRequest,readLines }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+  
+
+module.exports = { makeRequest,readLines,sleep }
