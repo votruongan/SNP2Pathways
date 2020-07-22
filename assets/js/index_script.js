@@ -69,7 +69,7 @@ function tableDisplayResult(tableId,arr){
     tableId.textContent="";
     if (arr.length == 0){
         setGrandParentHeight(tableId,"100px");
-        tableId.innerHTML = "<tr><td></td><td>No result found</td></tr>";
+        tableId.innerHTML = "<tr><td></td><td>No result</td></tr>";
         return;
     }
     setGrandParentHeight(tableId,"290px");
@@ -292,6 +292,22 @@ function applyPathwayFilter(display=true){
         setAlenG(JSON.stringify(raw_result[1]));
 }
 
+
+
+function filterPathwayFilter(){
+    const filterVal = filter_pathway_filter.value;
+    console.log("filtering",filterVal);
+    for (let i = 0; i < all_pathway_filter.length; i++) {
+        const ele = getEle("path_select_"+i).parentNode.parentNode;
+        if (ele.childNodes[1].textContent.toLowerCase().includes(filterVal.toLowerCase())){
+            console.log(">>",ele.childNodes[1].textContent);
+            setObjectVisiblity(ele,true);
+            continue;
+        }
+        setObjectVisiblity(ele,false);
+    }
+}
+
 function makePathwayCheck(pName,index){
     const temp = `<td><input type="checkbox" id="path_select_${index}" checked></input></td><td>${pName}</td>`;
     return makeElement('tr',temp);
@@ -305,6 +321,16 @@ function initPathwayFilter(){
         const line = makePathwayCheck(val,index);
         pathway_filter_box.appendChild(line);
     })
+}
+
+function setObjectVisiblity(obj, value){
+    if (value) {
+        obj.classList.remove("d-none");
+        obj.classList.add("d-block");
+        return;
+    }
+    obj.classList.remove("d-block");
+    obj.classList.add("d-none");
 }
 
 function setObjectActive(obj, value){
@@ -341,7 +367,8 @@ function toggleAllPathwayFilter(val){
 
 
 rsid.addEventListener("focusout",suggestAlternateFromRs);
-miRNA.addEventListener("change",sendMIR);
+miRNA.addEventListener("input",sendMIR);
+filter_pathway_filter.addEventListener("input",filterPathwayFilter);
 processButton.addEventListener("click",sendRS);
 deselectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(false)});
 selectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(true)});

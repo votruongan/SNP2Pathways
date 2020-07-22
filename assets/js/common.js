@@ -62,9 +62,9 @@ function changeHeight(x1, y1, x2, y2) {
     let cH = takeGrandParentHeightPx(alenC_result);
     let gH = takeGrandParentHeightPx(alenG_result);
     if (commonH + cH > 580){
-        
+
     }
-    setGrandParentHeight(common_result_display,(takeGrandParentHeightPx(common_result_display) + dy) + "px");
-    setGrandParentHeight(alenC_result,(takeGrandParentHeightPx(alenC_result) - dy) + "px");
-    setGrandParentHeight(alenG_result,(takeGrandParentHeightPx(alenG_result) - dy) + "px");
+    setGrandParentHeight(common_result_display,(commonH - dy) + "px");
+    setGrandParentHeight(alenC_result,(cH + dy) + "px");
+    setGrandParentHeight(alenG_result,(gH + dy) + "px");
 }
