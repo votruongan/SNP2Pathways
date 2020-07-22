@@ -296,11 +296,9 @@ function applyPathwayFilter(display=true){
 
 function filterPathwayFilter(){
     const filterVal = filter_pathway_filter.value;
-    console.log("filtering",filterVal);
     for (let i = 0; i < all_pathway_filter.length; i++) {
         const ele = getEle("path_select_"+i).parentNode.parentNode;
         if (ele.childNodes[1].textContent.toLowerCase().includes(filterVal.toLowerCase())){
-            console.log(">>",ele.childNodes[1].textContent);
             setObjectVisiblity(ele,true);
             continue;
         }
@@ -352,6 +350,8 @@ function toggleAllPathwayFilter(val){
     if (val){
         for (let i = 0; i < all_pathway_filter.length; i++) {
             const ele = getEle("path_select_"+i);
+            if(ele.parentNode.parentNode.classList.contains("d-none"))
+                continue;
             if (ele.checked)
                 continue;
             ele.click();
@@ -360,6 +360,8 @@ function toggleAllPathwayFilter(val){
     }
     for (let i = 0; i < all_pathway_filter.length; i++) {
         const ele = getEle("path_select_"+i);
+        if(ele.parentNode.parentNode.classList.contains("d-none"))
+            continue;
         if (ele.checked)
             ele.click();
     }
