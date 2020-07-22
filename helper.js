@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const _ = require('lodash');
 
-let dirtyProxyCount = 8; 
+let dirtyProxyCount = 0; 
 
 function readLines(path){
     return fs.readFileSync(path, "utf-8").split("\n").map((val) => { return val.split("\r")[0];});
