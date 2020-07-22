@@ -23,14 +23,10 @@ function toggleHandler(ch,seq){
             else
                 sxhr.addEventListener("load",function(){setAlenG(this.responseText,true)});
             sxhr.send();
-        },2000);
+        },3000);
         let xhr = makeXHR("seq",seq);
         xhr.send();
     }
-}
-
-function makeALink(){
-
 }
 
 function makeElement(type, data, link=null, style=null,keepRawData=false){
@@ -70,7 +66,7 @@ function setGrandParentHeight(target,value){
 }
 
 function tableDisplayResult(tableId,arr){
-    tableId.innerText="";
+    tableId.textContent="";
     if (arr.length == 0){
         setGrandParentHeight(tableId,"100px");
         tableId.innerHTML = "<tr><td></td><td>No result found</td></tr>";
@@ -145,7 +141,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
         console.log(raw_result[currentIndex]);
     }
     if (data.length > 0)
-        resultDisplayer.innerText = "";
+        resultDisplayer.textContent = "";
     if (result_array[oppositeIndex].length <= 0){
         result_array[currentIndex] = data;
         return;
@@ -179,11 +175,17 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
 }
 
 function setAlenC(data,isbegin=false){
-    console.log("setAlenC",data);
+    if (data==null || data==""){
+        console.log("data is null - alenResHandler:",alenResHandler);
+        return;
+    }
     setAlenResult(data,alenG_result,0,parseDiseases=isbegin);
 }
 function setAlenG(data,isbegin=false){
-    console.log("setAlenG",data);
+    if (data==null || data==""){
+        console.log("data is null - alenResHandler:",alenResHandler);
+        return;
+    }
     setAlenResult(data,alenG_result,1,parseDiseases=isbegin);
 }
 
@@ -194,14 +196,17 @@ function rsReturnProcessor(){
     for (let i = 0; i < obj.alenC.length; i++) {
         if (obj.alenC[i] != obj.alenG[i]){
             console.log("different in index ",i);
-            realObj.alenC = obj.alenC.slice(0,(i-1 < 0)?(0):(i-1)) + `<b>${obj.alenC[i]}</b>` + obj.alenC.slice(i+1);
-            realObj.alenG = obj.alenG.slice(0,(i-1 < 0)?(0):(i-1)) + `<b>${obj.alenG[i]}</b>` + obj.alenG.slice(i+1);
+            realObj.alenC = obj.alenC.slice(0,(i-1 < 0)?(0):(i-1))
+            + `<b style="font-size: 1.3rem">${obj.alenC[i]}</b>` + obj.alenC.slice(i+1);
+            realObj.alenG = obj.alenG.slice(0,(i-1 < 0)?(0):(i-1)) 
+            + `<b style="font-size: 1.3rem">${obj.alenG[i]}</b>` + obj.alenG.slice(i+1);
         }
     }
     alenC_display.innerHTML = realObj.alenC;
     alenG_display.innerHTML = realObj.alenG;
     alenC_result.textContent = '';
     alenG_result.textContent = '';
+    common_result_display.textContent = '';
     alenResHandler.forEach(ele => ele && clearInterval(ele));
     alenResHandler = [null,null];
     applyPathwayFilter(false);
@@ -295,7 +300,7 @@ function makePathwayCheck(pName,index){
 function initPathwayFilter(){
     const obj = JSON.parse(this.responseText);
     all_pathway_filter = obj.pathwayFilter;
-    pathway_filter_box.innerText = '';
+    pathway_filter_box.textContent = '';
     all_pathway_filter.forEach((val,index)=>{
         const line = makePathwayCheck(val,index);
         pathway_filter_box.appendChild(line);

@@ -24,16 +24,16 @@ function sequenceToResultId(seq){
 
 app.get('/seq/:sequence', async (req, res) => {
     let seq = req.params.sequence.toUpperCase();
+    let obj = {
+        sequence: seq,
+    };
     const checkRes = await readResultFile(sequenceToResultId(seq));
     if (checkRes != null){
         console.log(checkRes);
-        res.send(checkRes);
+        obj.path=seq;
+        res.send(obj);
         return;
     }
-    let obj = {
-        sequence: seq,
-        path: "",
-    };
     console.log("got sequence: ", seq);
     //make request to miRDB
     const postData = querystring.stringify({
