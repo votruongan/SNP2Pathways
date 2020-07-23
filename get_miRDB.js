@@ -24,7 +24,7 @@ async function parseMiRDBData(html,sequence,elementCallback){
             gId = gId[gId.length - 1];
             gLink = "https://www.genome.jp/dbget-bin/www_bget?hsa:"+ gId;
         }
-        if (parseInt(score) < 90)
+        if (parseInt(score) < 50)
             break;
         if (rank == undefined || rank == null)
             continue;

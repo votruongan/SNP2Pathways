@@ -130,7 +130,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     const oppositeIndex = (currentIndex == 1)?(0):(1);
     clearInterval(alenResHandler[currentIndex]);
     alenResHandler[currentIndex]= null;
-    resultDisplayer.innerHTML = "No result found";
+    resultDisplayer.innerHTML = "<tr><td></td><td>No result</td></tr>";
     if (content == "null" || content == null || content == "")
         return;
     let data = JSON.parse(content);
