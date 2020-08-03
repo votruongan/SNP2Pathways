@@ -10,7 +10,7 @@ function usingMiRNA(){
 let alenResHandler = [null,null];
 let all_pathway_filter = [];
 let pathway_filter = [];
-
+let isResolveForMIMAT = false;
 
 function toggleHandler(ch,seq){
     let index = (ch == "C")?(0):(1);
@@ -43,7 +43,8 @@ function makeElement(type, data, link=null, style=null,keepRawData=false){
         r.innerHTML = data;
     }
     if (style != null){
-        r.style = style;
+        console.log("Making class for ",type,style)
+        r.classList.add(style);
     }
     return r;
 }
@@ -57,7 +58,7 @@ function makeResultRow(data){
     mainNode.appendChild(makeElement("td",data.score));
     mainNode.appendChild(makeElement("td",data.gene, data.gLink));
     const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
-    mainNode.appendChild(makeElement("td",ds,null,"text-align: left;"));
+    mainNode.appendChild(makeElement("td",ds,null,"text-left"));
     return mainNode;
 }
 
@@ -126,6 +127,11 @@ function setLoadingPanel(val){
     loadingPanel.classList.add("d-none");
 }
 
+function setAlenTableHeight(height){
+    setGrandParentHeight(alenG_result,height);
+    setGrandParentHeight(alenC_result,height);
+}
+
 function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     const oppositeIndex = (currentIndex == 1)?(0):(1);
     clearInterval(alenResHandler[currentIndex]);
@@ -142,6 +148,14 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     }
     if (data.length > 0)
         resultDisplayer.textContent = "";
+    if (isResolveForMIMAT){
+        console.log('isResolveForMIMAT')
+        tableDisplayResult(alenC_result,data);
+        setLoadingPanel(false);
+        setGrandParentHeight(common_result_display,"100px");
+        setAlenTableHeight('450px');
+        return;
+    }
     if (result_array[oppositeIndex].length <= 0){
         result_array[currentIndex] = data;
         return;
@@ -168,8 +182,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
         setGrandParentHeight(common_result_display,"450px");
     }
     if (common_result.length == 0){
-        setGrandParentHeight(alenG_result,"450px");
-        setGrandParentHeight(alenC_result,"450px");
+        setAlenTableHeight('450px');
     }
     setLoadingPanel(false);
 }
@@ -193,6 +206,15 @@ function rsReturnProcessor(){
     let obj = JSON.parse(this.responseText);
     let realObj = JSON.parse(this.responseText);
     console.log(obj);
+    alenC_display.innerHTML = realObj.alenC;
+    alenC_result.textContent = '';
+    alenG_result.textContent = '';
+    common_result_display.textContent = '';
+    alenResHandler.forEach(ele => ele && clearInterval(ele));
+    alenResHandler = [null,null];
+    applyPathwayFilter(false);
+    toggleHandler("C", obj.alenC);
+    if (!obj.alenG) return;
     for (let i = 0; i < obj.alenC.length; i++) {
         if (obj.alenC[i] != obj.alenG[i]){
             console.log("different in index ",i);
@@ -204,13 +226,6 @@ function rsReturnProcessor(){
     }
     alenC_display.innerHTML = realObj.alenC;
     alenG_display.innerHTML = realObj.alenG;
-    alenC_result.textContent = '';
-    alenG_result.textContent = '';
-    common_result_display.textContent = '';
-    alenResHandler.forEach(ele => ele && clearInterval(ele));
-    alenResHandler = [null,null];
-    applyPathwayFilter(false);
-    toggleHandler("C", obj.alenC);
     toggleHandler("G", obj.alenG);
 }
 
@@ -262,10 +277,17 @@ function resetResultDisplay(){
 }
 
 async function sendRS(){
-    let rscode = rsid.value;
+    let rsCode = rsid.value;
+    let alter = alterType.value;
     resetResultDisplay();
     // return console.log(mircode);
-    const path = `rsidToInfo/${rscode}/mimat/${mimatCode}/alterType/${alterType.value}`;
+    isResolveForMIMAT = false;
+    if (rsCode == null || rsCode.length == 0) {
+        alter = 'CG';
+        rsCode = 'null';
+        isResolveForMIMAT = true;
+    }
+    const path = `rsidToInfo/${rsCode}/mimat/${mimatCode}/alterType/${alter}`;
     // console.log(path);
     let xhr = makeXHR(path);
     setLoadingPanel(true);
@@ -307,7 +329,7 @@ function filterPathwayFilter(){
 }
 
 function makePathwayCheck(pName,index){
-    const temp = `<td><input type="checkbox" id="path_select_${index}" checked></input></td><td>${pName}</td>`;
+    const temp = `<td class="px-3"><input type="checkbox" id="path_select_${index}" checked></input></td><td class="col-11 px-0">${pName}</td>`;
     return makeElement('tr',temp);
 }
 

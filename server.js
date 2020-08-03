@@ -74,11 +74,11 @@ app.get('/seq/:sequence', async (req, res) => {
 const allDataLines = readLines("rs_only.tsv").map((val) => {return val.split("\t");});
 const pathwayFilter = readLines("pathway_filter.txt");
 
-function uniqueMimatNamePos(allDataLines){
+function uniqueMimatNamePos(allLines){
     curMimat = "";
     let res = [];
-    for (let i = 0; i < allDataLines.length; i++) {
-        const ele = allDataLines[i];
+    for (let i = 0; i < allLines.length; i++) {
+        const ele = allLines[i];
         if (ele[10] == curMimat)
             continue;
         curMimat = ele[10];
@@ -89,10 +89,12 @@ function uniqueMimatNamePos(allDataLines){
 }
 
 const mimatPos = uniqueMimatNamePos(allDataLines);
+
 console.log("LOADED ",allDataLines.length," data line");
 const recommendMIR = mimatPos.map((a)=>{return a.mimat});
 const recommendHSA = mimatPos.map((a)=>{return a.hsa});
-console.log("RecommendMIR length:",recommendMIR.length,"- RecommendMIR length:",recommendHSA.length);
+const mimatSequences = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});
+console.log("RecommendMIR length:",recommendMIR.length,"- RecommendHSA length:",recommendHSA.length);
 
 
 // app.get('/miRNA/:mirna', (req, res) => {
@@ -185,6 +187,21 @@ app.get('/rsidToInfo/:rsId/mimat/:mimat/alterType/:altType', (req, res) => {
     let mId = req.params.mimat;
     let alterType = req.params.altType;
     const path = `rsidToInfo/${rsId}/mimat/${mId}/alterType/${alterType}`;
+    console.log(path);
+    //resolve for mimat only input
+    if (rsId == null || rsId == '' || rsId == 'null' || rsId == 'undefined'){
+        for (let i = 0; i < mimatSequences.length; i++) {
+            const element = mimatSequences[i];
+            if (element[0] != mId)
+                continue;
+            res.send ({alenC:element[2].toUpperCase()});
+            return;
+        }
+        res.send('null');
+        return;
+    }
+
+    // resolve for specified ref. SNP and its alternate type
     let start = mimatPosInfo(mId); const end = start.endPosition;
     start = start.basePosition;
     let ind = -1;
