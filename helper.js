@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const _ = require('lodash');
 
-let dirtyProxyCount = 0; 
+let dirtyProxyCount = 5; 
 
 function readLines(path){
     return fs.readFileSync(path, "utf-8").split("\n").map((val) => { return val.split("\r")[0];});
@@ -42,7 +42,7 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
         res.on('data', (chunk)=>{
             if (chunk.includes("Warning:")){
                 console.error(`Warning from site detected`);
-                throw new Error('Warning from site detected');
+                // throw new Error('Warning from site detected');
             }
             dataCallback(chunk);
         });

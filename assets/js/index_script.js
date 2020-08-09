@@ -1,6 +1,10 @@
 
 // let isUsing = true;
-
+let qIndex = window.location.href.indexOf("?")
+console.log(window.location.href,qIndex)
+if (qIndex > 0){
+    window.location.href = "/";
+}
 let mimatCode = "";
 let allRsSuggest = [];
 function usingMiRNA(){

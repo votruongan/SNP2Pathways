@@ -16,8 +16,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/html/index.html');
 })
 
-
-
 function sequenceToResultId(seq){
     return seq;
 }
