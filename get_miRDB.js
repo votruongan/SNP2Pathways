@@ -3,6 +3,10 @@ const jsdom = require("jsdom");
 const querystring = require('querystring');
 const { makeRequest, readLines } = require('./helper');
 
+function resultFileName(resId){
+    return "./results/"+resId.substr(0,2)+"/"+resId;
+}
+
 async function parseMiRDBData(html,sequence,elementCallback){
     const {JSDOM} = jsdom;
     const dom = new JSDOM(html);
@@ -38,7 +42,7 @@ async function parseMiRDBData(html,sequence,elementCallback){
         // console.log(obj); 
     }
     console.log("writing result for sequence",sequence);
-    fs.writeFileSync("./results/"+sequence, JSON.stringify(arr));
+    fs.writeFileSync(resultFileName(sequence), JSON.stringify(arr));
     return arr;
 }
 
@@ -80,4 +84,4 @@ function getMiRDBResult(content,sequence,elementCallback){
     makeRequest(options,dat,en);
 }
 
-module.exports = {parseMiRDBData, getMiRDBResult}
+module.exports = {resultFileName,parseMiRDBData, getMiRDBResult}

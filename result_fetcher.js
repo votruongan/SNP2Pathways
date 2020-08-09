@@ -3,20 +3,15 @@ var favicon = require('serve-favicon');
 const querystring = require('querystring');
 const fs = require('fs');
 
-const { parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
+const { resultFileName, parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError,makeRequest, readLines, sleep } = require('./helper');
 
 const requestInterval = 30 * 1000;
 const needFilter = false;
 
-const app = express();
-
-app.use(favicon("assets/img/favicon.png"));
-app.use(express.static(__dirname + '/assets/'));
-
 async function readResultFile(resId,nonExistingCallback=null){
-    const fileName = "./results/"+resId;
+    const fileName = resultFileName(resId);
     console.log("checking file:",fileName);
     let promise = new Promise((resolve, reject) => {
         // Check if the file exists in the current directory.
@@ -110,7 +105,7 @@ async function getResultFromSequences (seq) {
 const allDataLines = readLines("sequence_only.txt");
 
 async function checkSeq(seq){
-    const fileName = "./results/"+seq;
+    const fileName = resultFileName(seq);
     const append = ()=>{
         fs.appendFile("sequence_only_done.txt",seq+"\n",()=>{});
     }
@@ -135,7 +130,7 @@ async function main (){
         const element = allDataLines[i];
         getResultFromSequences(element);
         if (i % 10 == 0)
-            await sleep(2 * 60 * 1000);
+            await sleep(3 * 60 * 1000);
         await sleep(requestInterval);
     }
 }
