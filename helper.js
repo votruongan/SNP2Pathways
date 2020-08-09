@@ -42,7 +42,7 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
         res.on('data', (chunk)=>{
             if (chunk.includes("Warning:")){
                 console.error(`Warning from site detected`);
-                // throw new Error('Warning from site detected');
+                throw new SiteWarningError(customOptions.sequence);
             }
             dataCallback(chunk);
         });
@@ -62,6 +62,14 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+class SiteWarningError extends Error {
+    constructor(message) {
+      super(message); // (1)
+      this.name = "SiteWarningError"; // (2)
+    }
+}
   
 
-module.exports = { makeRequest,readLines,sleep }
+module.exports = {SiteWarningError,makeRequest,readLines,sleep }
+
+  

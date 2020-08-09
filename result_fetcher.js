@@ -5,21 +5,26 @@ const fs = require('fs');
 
 const { parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
-const { makeRequest, readLines, sleep } = require('./helper');
+const { SiteWarningError,makeRequest, readLines, sleep } = require('./helper');
+
+const requestInterval = 20 * 1000;
+const needFilter = false;
 
 const app = express();
-const port = process.env.PORT || 3000;
+
 app.use(favicon("assets/img/favicon.png"));
 app.use(express.static(__dirname + '/assets/'));
 
-async function readResultFile(resId){
-    let fileName = "./results/"+resId;
+async function readResultFile(resId,nonExistingCallback=null){
+    const fileName = "./results/"+resId;
     console.log("checking file:",fileName);
     let promise = new Promise((resolve, reject) => {
         // Check if the file exists in the current directory.
         fs.access(fileName, fs.constants.F_OK, (err) => {
             if (err){
                 console.log(fileName,"not existing");
+                if (nonExistingCallback)
+                    nonExistingCallback(fileName);
                 resolve(null);
             }
             resolve(true);
@@ -53,6 +58,7 @@ async function getResultFromSequences (seq) {
         sequence: seq,
     };
     const checkRes = await readResultFile(sequenceToResultId(seq));
+    console.log(seq,checkRes);
     if (checkRes != null){
         console.log(checkRes);
         obj.path=seq;
@@ -81,12 +87,18 @@ async function getResultFromSequences (seq) {
           'Content-Length': Buffer.byteLength(postData)
         },
         postData: postData,
+        sequence: seq,
     };
-
-    makeRequest(options,(chunk) => {
-        console.log("chunk",chunk);
-        getMiRDBResult(chunk,seq,getKEGGDataOffline);
-    },en,true);
+    try{
+        makeRequest(options,(chunk) => {
+            console.log("chunk",chunk);
+            getMiRDBResult(chunk,seq,getKEGGDataOffline);
+        },en,true);
+    } catch (e) {
+        if (err instanceof SiteWarningError) console.log(e);
+        await sleep(120*1000);
+        getResultFromSequences(seq);
+    }
 }
 
 // --- INITIALIZATION PROCESS
@@ -96,12 +108,44 @@ async function getResultFromSequences (seq) {
 // const mimat = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});
 const allDataLines = readLines("sequence_only.txt");
 
+async function checkSeq(seq){
+    const fileName = "./results/"+seq;
+    const append = ()=>{
+        fs.appendFile("sequence_only_done.txt",seq+"\n",()=>{});
+    }
+    let r = await readResultFile(seq,append);
+}
+
+async function filterAllDataLines(){
+    let i = 0;
+    for (let i = 0; i < 10000; i++) {
+        checkSeq(allDataLines[i])
+        await sleep(1);
+    }
+    // fs.writeFile("sequence_only_new.txt",allDataLines.join("\n"),()=>{});
+}
+
 async function main (){
-    for (let i = 0; i < allDataLines.length; i++) {
+    const oldLen = allDataLines.length;
+    console.log(oldLen, allDataLines.length);
+    getResultFromSequences(allDataLines[0]);
+    for (let i = 1; i < allDataLines.length; i++) {
         const element = allDataLines[i];
         getResultFromSequences(element);
-        await sleep(20000);
+        if (i % 5 == 0)
+            await sleep(3 * 60 * 1000);
+        await sleep(requestInterval);
     }
 }
 
-main();
+if (needFilter)
+    filterAllDataLines()
+else
+    main();
+
+process.on('uncaughtException', function(err) {
+    if(err instanceof SiteWarningError){
+        console.log("warning sequence:",err.message);
+        getResultFromSequences(err.message);
+    }
+});  

@@ -300,3 +300,10 @@ app.get('/recommendHSA', (req, res) => {
 })
 
 app.listen(port, () => console.log(`SNP2Pathway app is listening at http://localhost:${port}`))
+
+process.on('uncaughtException', function(err) {
+    if(err instanceof SiteWarningError){
+        console.log("warning sequence:",err.message);
+        getResultFromSequences(err.message);
+    }
+});  
