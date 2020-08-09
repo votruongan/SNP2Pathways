@@ -7,7 +7,7 @@ const { parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError,makeRequest, readLines, sleep } = require('./helper');
 
-const requestInterval = 20 * 1000;
+const requestInterval = 30 * 1000;
 const needFilter = false;
 
 const app = express();
@@ -48,6 +48,7 @@ async function readResultFile(resId,nonExistingCallback=null){
         return null;
     }
 }
+
 function sequenceToResultId(seq){
     return seq;
 }
@@ -92,7 +93,7 @@ async function getResultFromSequences (seq) {
     try{
         makeRequest(options,(chunk) => {
             console.log("chunk",chunk);
-            getMiRDBResult(chunk,seq,getKEGGDataOffline);
+            getMiRDBResult(chunk,seq,null);
         },en,true);
     } catch (e) {
         if (err instanceof SiteWarningError) console.log(e);
@@ -129,11 +130,12 @@ async function main (){
     const oldLen = allDataLines.length;
     console.log(oldLen, allDataLines.length);
     getResultFromSequences(allDataLines[0]);
+    await sleep(requestInterval);
     for (let i = 1; i < allDataLines.length; i++) {
         const element = allDataLines[i];
         getResultFromSequences(element);
-        if (i % 5 == 0)
-            await sleep(3 * 60 * 1000);
+        if (i % 10 == 0)
+            await sleep(2 * 60 * 1000);
         await sleep(requestInterval);
     }
 }
