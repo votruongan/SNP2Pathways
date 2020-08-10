@@ -3,7 +3,7 @@ var favicon = require('serve-favicon');
 const querystring = require('querystring');
 const fs = require('fs');
 
-const { parseMiRDBData, getMiRDBResult } = require('./get_miRDB');
+const { parseMiRDBData, getMiRDBResult,resultFileName } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { makeRequest, readLines, sleep } = require('./helper');
 
@@ -59,7 +59,7 @@ app.get('/seq/:sequence', async (req, res) => {
 
     makeRequest(options,(chunk) => {
         console.log("chunk",chunk);
-        getMiRDBResult(chunk,seq,getKEGGDataOffline);
+        getMiRDBResult(chunk,seq,null);
     },en,true);
     //send the result back to client
     res.send(obj);
@@ -117,7 +117,7 @@ console.log("RecommendMIR length:",recommendMIR.length,"- RecommendHSA length:",
 // })
   
 async function readResultFile(resId){
-    let fileName = "./results/"+resId;
+    let fileName = resultFileName(resId);
     console.log("checking file:",fileName);
     let promise = new Promise((resolve, reject) => {
         // Check if the file exists in the current directory.
@@ -149,19 +149,14 @@ async function readResultFile(resId){
 }
 
 app.get('/result/:resid', async (req, res) => {
-    let fileName = "./results/"+req.params.resid;
+    let fileName = resultFileName(req.params.resid);
     // Check if the file is readable.
     // console.log("checking file:", fileName);
     const checkRes = await readResultFile(req.params.resid);
-    // console.log(checkRes);
-    // const check = fs.existsSync(fileName);
-    // if (check){
-    //     let content = fs.readFileSync(fileName);  
-    //     console.log("content:", content);          
-    //     res.send(content);
-    // } else {       
-    //     res.send(null);
-    // }
+    if (checkRes || checkRes.length > 0)
+        for (let i = 0; i < checkRes.length; i++) {
+            checkRes[i].diseases = await getKEGGDataOffline(checkRes[i].geneId);
+        }
     res.send(checkRes);
 })
 

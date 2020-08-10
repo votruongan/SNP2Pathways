@@ -7,10 +7,10 @@ const { resultFileName, parseMiRDBData, getMiRDBResult } = require('./get_miRDB'
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError,makeRequest, readLines, sleep } = require('./helper');
 
-const requestInterval = 30 * 1000;
+const requestInterval = 10 * 1000;
 const needFilter = false;
 
-async function readResultFile(resId,nonExistingCallback=null){
+async function readResultFile(resId,notExistingCallback=null){
     const fileName = resultFileName(resId);
     console.log("checking file:",fileName);
     let promise = new Promise((resolve, reject) => {
@@ -18,8 +18,8 @@ async function readResultFile(resId,nonExistingCallback=null){
         fs.access(fileName, fs.constants.F_OK, (err) => {
             if (err){
                 console.log(fileName,"not existing");
-                if (nonExistingCallback)
-                    nonExistingCallback(fileName);
+                if (notExistingCallback)
+                    notExistingCallback(fileName);
                 resolve(null);
             }
             resolve(true);
@@ -131,7 +131,7 @@ async function main (){
         getResultFromSequences(element);
         if (i % 7 == 0){
             console.log(">>> BLOCK DONE - RELAXING")
-            await sleep(3 * 60 * 1000);
+            await sleep(2 * 60 * 1000);
         }
         await sleep(requestInterval);
     }
