@@ -129,8 +129,10 @@ async function main (){
     for (let i = 1; i < allDataLines.length; i++) {
         const element = allDataLines[i];
         getResultFromSequences(element);
-        if (i % 10 == 0)
+        if (i % 7 == 0){
+            console.log(">>> BLOCK DONE - RELAXING")
             await sleep(3 * 60 * 1000);
+        }
         await sleep(requestInterval);
     }
 }
