@@ -7,7 +7,7 @@ const { resultFileName, parseMiRDBData, getMiRDBResult } = require('./get_miRDB'
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError,makeRequest, readLines, sleep } = require('./helper');
 
-const requestInterval = 10 * 1000;
+const requestInterval = 5 * 1000;
 const needFilter = false;
 
 async function readResultFile(resId,notExistingCallback=null){
