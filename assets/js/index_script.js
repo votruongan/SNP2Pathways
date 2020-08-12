@@ -401,3 +401,55 @@ processButton.addEventListener("click",sendRS);
 deselectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(false)});
 selectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(true)});
 apply_pathway_filter.addEventListener("click",applyPathwayFilter);
+
+
+
+
+// create canvas element and append it to document body
+var canvas = document.createElement('canvas');
+document.body.appendChild(canvas);
+
+// some hotfixes... ( ≖_≖)
+document.body.style.margin = 0;
+canvas.style.position = 'fixed';
+
+// get canvas 2D context and set him correct size
+var cvctx = canvas.getContext('2d');
+cvresize();
+
+// last known position
+var cvpos = { x: 0, y: 0 };
+
+window.addEventListener('resize', cvresize);
+document.addEventListener('mousemove', cvdraw);
+document.addEventListener('mousedown', cvsetPosition);
+document.addEventListener('mouseenter', cvsetPosition);
+
+// new position from mouse event
+function cvsetPosition(e) {
+  cvpos.x = e.clientX;
+  cvpos.y = e.clientY;
+}
+
+// resize canvas
+function cvresize() {
+    cvctx.canvas.width = window.innerWidth;
+    cvctx.canvas.height = window.innerHeight;
+}
+
+function cvdraw(e) {
+  // mouse left button must be pressed
+  if (e.buttons !== 1) return;
+
+  cvctx.beginPath(); // begin
+
+  cvctx.lineWidth = 5;
+  cvctx.lineCap = 'round';
+  cvctx.strokeStyle = '#c0392b';
+
+  cvctx.moveTo(cvpos.x, cvpos.y); // from
+  cvsetPosition(e);
+  cvctx.lineTo(cvpos.x, cvpos.y); // to
+
+  cvctx.stroke(); // draw it!
+}

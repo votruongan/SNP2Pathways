@@ -58,7 +58,7 @@ app.get('/seq/:sequence', async (req, res) => {
     };
 
     makeRequest(options,(chunk) => {
-        console.log("chunk",chunk);
+        console.log("CHUNK:",chunk);
         getMiRDBResult(chunk,seq,null);
     },en,true);
     //send the result back to client
@@ -153,11 +153,13 @@ app.get('/result/:resid', async (req, res) => {
     // Check if the file is readable.
     // console.log("checking file:", fileName);
     const checkRes = await readResultFile(req.params.resid);
-    if (checkRes || checkRes.length > 0)
-        for (let i = 0; i < checkRes.length; i++) {
-            checkRes[i].diseases = await getKEGGDataOffline(checkRes[i].geneId);
+    const resObj = JSON.parse(checkRes);
+    if (resObj && checkRes.length > 0){
+        for (let i = 0; i < resObj.length; i++) {
+            resObj[i].diseases = await getKEGGDataOffline(resObj[i].geneId);
         }
-    res.send(checkRes);
+    }
+    res.send(resObj);
 })
 
 function getFocusInMIRFile(mirId){
