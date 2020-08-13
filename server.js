@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const { parseMiRDBData, getMiRDBResult,resultFileName } = require('./get_miRDB');
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
-const { makeRequest, readLines, sleep } = require('./helper');
+const { SiteWarningError, makeRequest, readLines, sleep } = require('./helper');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -298,9 +298,10 @@ app.get('/recommendHSA', (req, res) => {
 
 app.listen(port, () => console.log(`SNP2Pathway app is listening at http://localhost:${port}`))
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', async (err) => {
     if(err instanceof SiteWarningError){
         console.log("warning sequence:",err.message);
+        await sleep(2 * 60 * 1000);
         getResultFromSequences(err.message);
     }
 });  

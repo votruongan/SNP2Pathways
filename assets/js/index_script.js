@@ -27,7 +27,7 @@ function toggleHandler(ch,seq){
             else
                 sxhr.addEventListener("load",function(){setAlenG(this.responseText,true)});
             sxhr.send();
-        },3000);
+        },5000);
         let xhr = makeXHR("seq",seq);
         xhr.send();
     }
@@ -65,7 +65,7 @@ function makeDiseaseDisplay(val){
 function makeResultRow(data){
     var mainNode = document.createElement("tr");
     mainNode.appendChild(makeElement("td",data.score,{onclick:showRnaHybrid}));
-    mainNode.appendChild(makeElement("td",data.gene,{link:data.gLink}));
+    mainNode.appendChild(makeElement("td",data.gene,{link:data.gLink, onclick:function(ev){ev.stopPropagation();}}));
     const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
     mainNode.appendChild(makeElement("td",ds,{style:"text-left"}));
     // mainNode.onclick = showRnaHybrid; 

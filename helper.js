@@ -12,8 +12,11 @@ function readLines(path){
 
 const connectLines = readLines("./open_proxy.txt");
 
-function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false){
+async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false){
     console.log(customOptions);
+    if (isOnWarning){
+        await sleep(61*1000);
+    }
     const hostName = customOptions.hostname ||"mirdb.org";
     const pathName = customOptions.path ||"/cgi-bin/custom.cgi";
     let prox = [hostName,"80"];
@@ -44,7 +47,7 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
         res.on('data', (chunk)=>{
             if (chunk.includes("Warning:")){
                 isOnWarning = true;
-                setTimeout(()=>{isOnWarning = true},3*60*1000)
+                setTimeout(()=>{isOnWarning = false},1*60*1000)
                 console.error(`Warning from site detected`);
                 throw new SiteWarningError(customOptions.sequence);
             }
@@ -53,11 +56,13 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
         res.on('end', endCallback);
     });
 
-    myReq.on('error', (e) => {
+    myReq.on('error', async (e) => {
+        if (!e.message.includes("ETIMEDOUT") && !e.message.includes("REFUSED"))
+            await sleep(15*1000);
         makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy);
         console.error(`problem with request: ${e.message}`);
     });
-
+    // write body to POST request and send
     myReq.write(customOptions.postData);
     myReq.end();
 }
