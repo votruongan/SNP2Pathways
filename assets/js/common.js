@@ -49,8 +49,12 @@ window.addEventListener('mouseup', e => {
   }
 });
 
+function grandParent(ele){
+  return ele.parentNode.parentNode;
+}
+
 function takeGrandParentHeightPx(ele){
-    let raw = ele.parentNode.parentNode.style.height;
+    let raw = grandParent(ele).style.height;
     raw.substring(0,raw.length-3);
     return parseInt(raw);
 }
@@ -60,11 +64,10 @@ function changeHeight(x1, y1, x2, y2) {
     console.log(dy);
     let commonH = takeGrandParentHeightPx(common_result_display);
     let cH = takeGrandParentHeightPx(alenC_result);
-    let gH = takeGrandParentHeightPx(alenG_result);
     if (commonH + cH > 580){
-
+        
     }
     setGrandParentHeight(common_result_display,(commonH - dy) + "px");
     setGrandParentHeight(alenC_result,(cH + dy) + "px");
-    setGrandParentHeight(alenG_result,(gH + dy) + "px");
+    setGrandParentHeight(alenG_result,(cH + dy) + "px");
 }

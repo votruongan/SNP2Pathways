@@ -17,6 +17,7 @@
         font-size: 8px;
       }
   }
+/*   
   @media only screen and (max-width: 1049px) {
       *,body{
         font-size: 10px !important;
@@ -33,7 +34,7 @@
   *,body{
     font-size: 16px !important; 
   }
-  }
+  } */
 
 .shadow{
   
@@ -105,6 +106,10 @@ body {
 .overlay-button{
 	top:60% !important;
 	left:85% !important;
+}
+
+tr:hover{
+  background-color: cyan;
 }
 
 .focus{

@@ -33,10 +33,15 @@ function toggleHandler(ch,seq){
     }
 }
 
-function makeElement(type, data, link=null, style=null,keepRawData=false){
+function makeElement(type, data, options=null){
+    const link = options&& options.link;
+    const style = options&&options.style;
     var r = document.createElement(type);
     // data.replace("\n","<br/>");
     // var a = document.createTextNode(data);
+    if (options && options.onclick){
+        r.onclick = options.onclick
+    }
     if (link != null){
         a = document.createElement('a');
         a.innerText = data;
@@ -60,9 +65,10 @@ function makeDiseaseDisplay(val){
 function makeResultRow(data){
     var mainNode = document.createElement("tr");
     mainNode.appendChild(makeElement("td",data.score));
-    mainNode.appendChild(makeElement("td",data.gene, data.gLink));
+    mainNode.appendChild(makeElement("td",data.gene));
     const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
-    mainNode.appendChild(makeElement("td",ds,null,"text-left"));
+    mainNode.appendChild(makeElement("td",ds,{style:"text-left"}));
+    mainNode.onclick = showRnaHybrid; 
     return mainNode;
 }
 
@@ -96,9 +102,9 @@ function filterDiseasesInArray(objArray){
         while(j < ele.diseases.length){
             const dele = ele.diseases[j++];
             if (!pathway_filter.includes(dele.name)){
-                console.log(dele.name)
+                // console.log(dele.name)
                 ele.diseases.splice(--j,1);
-                console.log(ele.diseases)
+                // console.log(ele.diseases)
             }
         }    
     }
@@ -235,9 +241,12 @@ function rsReturnProcessor(){
 
 //rs ids returned from the mir
 function mirReturnProcessor(){
+    setObjectActive(rsid,false);
     let obj = JSON.parse(this.responseText);
+    if (!obj) return;
     allRsSuggest = obj.rsidSuggest;
     rsSuggest = allRsSuggest.map((val)=>{return val.rsId});
+    if (!rsSuggest || rsSuggest.length == 0) return;
     mimatCode = obj.MIMAT;
     setObjectActive(rsid,true);
     return console.log(rsSuggest);
@@ -332,6 +341,22 @@ function filterPathwayFilter(){
     }
 }
 
+function showRnaHybrid(gene=null,alen1=null,alen2=null){
+    if (alen2 == null){
+        grandParent(refRnaHybrid).classList.remove("col-6");
+        grandParent(refRnaHybrid).classList.add("col-12");
+        grandParent(altRnaHybrid).classList.add("d-none");
+    }
+    rnaHybridResult.classList.add("focus")
+}
+
+function unshowRnaHybrid(){
+    rnaHybridResult.classList.remove("focus");
+    grandParent(refRnaHybrid).classList.remove("col-12");
+    grandParent(refRnaHybrid).classList.add("col-6");
+    grandParent(altRnaHybrid).classList.remove("d-none");
+}
+
 function makePathwayCheck(pName,index){
     const temp = `<td class="px-3"><input type="checkbox" id="path_select_${index}" checked></input></td><td class="col-11 px-0">${pName}</td>`;
     return makeElement('tr',temp);
@@ -393,7 +418,6 @@ function toggleAllPathwayFilter(val){
     }
 }
 
-
 rsid.addEventListener("focusout",suggestAlternateFromRs);
 miRNA.addEventListener("input",sendMIR);
 filter_pathway_filter.addEventListener("input",filterPathwayFilter);
@@ -401,55 +425,4 @@ processButton.addEventListener("click",sendRS);
 deselectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(false)});
 selectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(true)});
 apply_pathway_filter.addEventListener("click",applyPathwayFilter);
-
-
-
-
-// create canvas element and append it to document body
-var canvas = document.createElement('canvas');
-document.body.appendChild(canvas);
-
-// some hotfixes... ( ≖_≖)
-document.body.style.margin = 0;
-canvas.style.position = 'fixed';
-
-// get canvas 2D context and set him correct size
-var cvctx = canvas.getContext('2d');
-cvresize();
-
-// last known position
-var cvpos = { x: 0, y: 0 };
-
-window.addEventListener('resize', cvresize);
-document.addEventListener('mousemove', cvdraw);
-document.addEventListener('mousedown', cvsetPosition);
-document.addEventListener('mouseenter', cvsetPosition);
-
-// new position from mouse event
-function cvsetPosition(e) {
-  cvpos.x = e.clientX;
-  cvpos.y = e.clientY;
-}
-
-// resize canvas
-function cvresize() {
-    cvctx.canvas.width = window.innerWidth;
-    cvctx.canvas.height = window.innerHeight;
-}
-
-function cvdraw(e) {
-  // mouse left button must be pressed
-  if (e.buttons !== 1) return;
-
-  cvctx.beginPath(); // begin
-
-  cvctx.lineWidth = 5;
-  cvctx.lineCap = 'round';
-  cvctx.strokeStyle = '#c0392b';
-
-  cvctx.moveTo(cvpos.x, cvpos.y); // from
-  cvsetPosition(e);
-  cvctx.lineTo(cvpos.x, cvpos.y); // to
-
-  cvctx.stroke(); // draw it!
-}
+closeRnaHybrid.addEventListener("click",unshowRnaHybrid);

@@ -2,7 +2,9 @@ const http = require('http');
 const fs = require('fs');
 const _ = require('lodash');
 
-let dirtyProxyCount = 20; 
+let dirtyProxyCount = 0; 
+
+let isOnWarning = false;
 
 function readLines(path){
     return fs.readFileSync(path, "utf-8").split("\n").map((val) => { return val.split("\r")[0];});
@@ -41,6 +43,8 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
         res.setEncoding('utf8');
         res.on('data', (chunk)=>{
             if (chunk.includes("Warning:")){
+                isOnWarning = true;
+                setTimeout(()=>{isOnWarning = true},3*60*1000)
                 console.error(`Warning from site detected`);
                 throw new SiteWarningError(customOptions.sequence);
             }
