@@ -36,6 +36,10 @@
   }
   } */
 
+a {
+    pointer-events: visiblePainted
+ }
+
 .shadow{
   
 	box-shadow: 0 .2rem 1rem rgba(0,0,0,.23)!important;

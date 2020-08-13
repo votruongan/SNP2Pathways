@@ -64,11 +64,11 @@ function makeDiseaseDisplay(val){
 
 function makeResultRow(data){
     var mainNode = document.createElement("tr");
-    mainNode.appendChild(makeElement("td",data.score));
-    mainNode.appendChild(makeElement("td",data.gene));
+    mainNode.appendChild(makeElement("td",data.score,{onclick:showRnaHybrid}));
+    mainNode.appendChild(makeElement("td",data.gene,{link:data.gLink}));
     const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
     mainNode.appendChild(makeElement("td",ds,{style:"text-left"}));
-    mainNode.onclick = showRnaHybrid; 
+    // mainNode.onclick = showRnaHybrid; 
     return mainNode;
 }
 

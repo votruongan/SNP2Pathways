@@ -3,7 +3,7 @@ const fs = require('fs');
 const _ = require('lodash');
 
 let dirtyProxyCount = 0; 
-
+let isRequesting = 0;
 let isOnWarning = false;
 
 function readLines(path){
@@ -36,7 +36,7 @@ function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false
           'Content-Length': Buffer.byteLength(customOptions.postData)
         }
     };
-      
+    
     const myReq = http.request(options, (res) => {
         console.log(`IP: ${prox[0]}STATUS: ${res.statusCode}`);
         // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
