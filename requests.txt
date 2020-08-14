@@ -1,0 +1,106 @@
+var request = require('request');
+
+var headers = {
+    'Connection': 'keep-alive',
+    'Accept': 'application/xml, text/xml, */*; q=0.01',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Faces-Request': 'partial/ajax',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Origin': 'https://bibiserv.cebitec.uni-bielefeld.de',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Dest': 'empty',
+    'Referer': 'https://bibiserv.cebitec.uni-bielefeld.de/rnahybrid?id=rnahybrid_view_submission',
+    'Accept-Language': 'en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7',
+    'Cookie': 'JSESSIONID=d2312a80837ec23a0341dc3e6b2c'
+};
+
+
+var options = {
+    url: 'https://bibiserv.cebitec.uni-bielefeld.de/applications/rnahybrid/pages/rnahybrid_function_rnahybrid_p_1.jsf',
+    method: 'POST',
+    headers: headers,
+    body: dataString1
+};
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+    }
+}
+
+request(options, callback);
+
+
+
+var request = require('request');
+
+var headers = {
+    'Connection': 'keep-alive',
+    'Accept': 'application/xml, text/xml, */*; q=0.01',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Faces-Request': 'partial/ajax',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Origin': 'https://bibiserv.cebitec.uni-bielefeld.de',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Dest': 'empty',
+    'Referer': 'https://bibiserv.cebitec.uni-bielefeld.de/rnahybrid?viewType=submission&subType=rnahybrid_function_rnahybrid_p_2',
+    'Accept-Language': 'en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7',
+    'Cookie': 'JSESSIONID=d2312a80837ec23a0341dc3e6b2c'
+};
+
+var dataString = 'javax.faces.partial.ajax=true&javax.faces.source=j_idt37%3Aj_idt100&javax.faces.partial.execute=%40all&javax.faces.partial.render=j_idt37%3AparamGroup&j_idt37%3Aj_idt100=j_idt37%3Aj_idt100&j_idt37=j_idt37&j_idt37%3Arnahybrid_parameter_hits_per_target_rnahybrid_function_rnahybrid=1&j_idt37%3Arnahybrid_parameter_energy_threshold_rnahybrid_function_rnahybrid=&j_idt37%3Arnahybrid_parameter_generate_graphics_rnahybrid_function_rnahybrid=on&j_idt37%3Arnahybrid_parameter_helix_constraint_from_rnahybrid_function_rnahybrid=&j_idt37%3Arnahybrid_parameter_helix_constraint_to_rnahybrid_function_rnahybrid=&j_idt37%3Arnahybrid_parameter_max_bulge_loop_length_rnahybrid_function_rnahybrid=&j_idt37%3Arnahybrid_parameter_max_internal_loop_lenght_rnahybrid_function_rnahybrid=&j_idt37%3Arnahybrid_parameter_approximate_pvalue_rnahybrid_function_rnahybrid=human&javax.faces.ViewState=%2BEGZ9h9l2TaoqfBnFw%2BlO%2F7zY0lJEtO7zNNd2U0RXqk%2FjmEOMn%2FcJUDRm11G%2FLpOIWjylw0rxI1osLlE%2BaNSiEl9COrw7nyW9Nu4S%2B%2Bl41ITQACvyQHA8isKsK3XFO7TEwbcZadi5FzNaKD2Aw7o5ljPE%2BaF5ho3H26dGG%2F1sttw96CYKdTaZY8RBsAj7HVrsvRfKXxFUcTsCU77a%2BO2S8l8E4Y4YyKdPnrvbKX1S7Mvni0WbM2EvsLs4aGRlbBVCSDZP5XWzUhWBeR5z7NjTxHauUox81peIL5QWNBhvDMXKg8Ae4KBHLQkFHBU%2FSHReb8ul8Js1WCiVE4Tzat5jFyhIiZpu4Q1u1VcHp3r%2FudaJY4dkZkmZ6KnhGFyPnEGdqSA73t7F7wd9SJlvNmkHR9MG14uAc%2F7xVcezZpt4xIijeLCJkNOUhguO%2FQb0b%2FYxZTDsYt6Fw7jxiUAOWZ79Htoq%2BGgURo6g7qJJ%2FHuCv8pf5R1UOES7oFaYcFjGVES5J7lokM3Rxsw4ZZJR8m3%2FHv3z3B5INyHOT1yxruP8RcD9GcaAz72JyVJOoVhZQ5%2B52vF9U60trunTCUWFELCrBswkW67%2BSnTYK46cKLrnXPNAebY8icfumDuVhX6Zyut2dOcC79RXNzCSILPoTRIbHcUJjNwOTItsvHV%2F6pWJxINEV2401pGuNNM4XQJdvrTK%2FdTA4Pfg2xPGZ4nlMJIws7HVl5Tl8AmPkywc9nWBDKQ%2F3CvBUZ1HQaG1YodS3oZTwJ97uOunBPqphfmYiUYZ7O6fO%2FCYuss8nfx0FlrOPigqBHAlinsfTF%2B99lp%2B5xk5sk9bbE7R%2FW8x9jkQg3Mbb5X2OgGpdsD0J92OnX%2FJ1VhyB6oAtVa9vw2uHTiSiWYK7yZP%2FI%2F1Q0W%2F9bAYZh0R5FO%2FSJqNaUIaZfk98oGKMSFGh47tHA3NfIDOUriMYxb%2Fc83WsvFuSEt1Qt73%2BlB1dwwbc8hPZQ8hJ9F%2B8gv0UInmB6668lkxkV55pfBBFSt';
+
+var options = {
+    url: 'https://bibiserv.cebitec.uni-bielefeld.de/applications/rnahybrid/pages/rnahybrid_function_rnahybrid_p_2.jsf',
+    method: 'POST',
+    headers: headers,
+    body: dataString
+};
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+    }
+}
+
+request(options, callback);
+
+
+var request = require('request');
+
+var headers = {
+    'Connection': 'keep-alive',
+    'Accept': 'application/xml, text/xml, */*; q=0.01',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Faces-Request': 'partial/ajax',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Origin': 'https://bibiserv.cebitec.uni-bielefeld.de',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Dest': 'empty',
+    'Referer': 'https://bibiserv.cebitec.uni-bielefeld.de/rnahybrid?viewType=submission&subType=rnahybrid_function_rnahybrid_p_3',
+    'Accept-Language': 'en-US,en;q=0.9,vi-VN;q=0.8,vi;q=0.7',
+    'Cookie': 'JSESSIONID=d2312a80837ec23a0341dc3e6b2c'
+};
+
+var dataString = 'javax.faces.partial.ajax=true&javax.faces.source=j_idt37%3Aj_idt70&javax.faces.partial.execute=%40all&javax.faces.partial.render=j_idt37%3Aresulthandler&j_idt37%3Aj_idt70=j_idt37%3Aj_idt70&j_idt37=j_idt37&j_idt37%3Aj_idt41=spoolDirectory&javax.faces.ViewState=0dc7VlpwDEKWHxZ3xkCHmzbhcND2uxtJAihwxVqMUDOSoja62HQPuHwnAOvnWrsMBUFbNwXSpssjZ%2FulL9qkvmy3r444x0CLh40qS5wda1t%2B0WL2WnhHN%2BZF%2F3EycGh3x9wX%2Bzro0Kffhv187gTxtUA%2FT6AtyUV51J3LgG5eYQloytizY6hUkAzjr5F2FiWQjPEDgafJE4iCaa6HTCq14y%2FOq8MNoK5%2BkNZGjYQy77ahlGtT%2BWB3EGzPI8NMVp82LGpeGgDkD5mxzbq2JBFY0a%2F3u6LCB8sAjrml6fnwSUamJto3RZkeDvhM5346tfmWm%2BPATZqVZ3SOQIaJBh9Trf0BysmvX6Zx%2BO7yO15D6LJqFij%2BtvcWNDVXG4Mrz5CswRY68%2FZynkXwPA2QIKdP7doOKzvHiIiYuUEmh2ejcoQH1NlGnQJLImoLJ8JnUeWut1BxAFFj5MPpBNNCAC2OU1Iny3yaUc1fUbAmiCbRzQGqWiBcOKvqJYPPRG7b8vYdXGbtKikhMtdhAB76%2FXOlUiwH2UldCsrrSci5SywUz6oiHiTu96JTrvBVeu8n7KUd4RsSUIVGDyYS%2F2tD0azi5WKodeSwas28MAd1AhasvZzrZizN48vRstpsdIH2I%2FctsCBtzU6sQr%2F%2BQcX1C79xf9M21irVr3%2Bf0HKQDZ0F%2FC%2BhNJBY1fF%2BsGpm3NK9Q3x7QrDM5JyXhyhLpc299y4wBsJl1ky31KMqoKvKR3f8QQsY1kCiwYnx1ulcdaIrCNST5S2yBAK%2FjPpaS5XtHLwkf8d4TYL4QbRQszaQFAPFppXTSBgeVsZpLW%2BkGWAS6mnWMF9Qb32tF7roQlV8C7Oi%2FPO9tz7GOL7qwRvxqqs%2By6f53QtegU1rr53j9i4zrhL1WVAUhuhE2Fvm3BmgJ2gNedaFwQJpmKZOgAGGRIowX06x1cpEhyonS4x%2Ba14TnNKQ0Rdieh8oqmxRrxCPv7jp63y4e3AmNlc3KWk5QRB2%2FHD3Wf4IufLlYkxpikjXKJSP';
+
+var options = {
+    url: 'https://bibiserv.cebitec.uni-bielefeld.de/applications/rnahybrid/pages/rnahybrid_function_rnahybrid_p_3.jsf',
+    method: 'POST',
+    headers: headers,
+    body: dataString
+};
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+    }
+}
+
+request(options, callback);
