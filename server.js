@@ -4,6 +4,8 @@ const querystring = require('querystring');
 const fs = require('fs');
 
 const { parseMiRDBData, getMiRDBResult,resultFileName } = require('./get_miRDB');
+const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta } = require('./get_RNAHybrid');
+
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError, makeRequest, readLines, sleep } = require('./helper');
 
@@ -19,6 +21,18 @@ app.get('/', (req, res) => {
 function sequenceToResultId(seq){
     return seq;
 }
+
+function prepareFasta(head,seq){
+    return '>'+head+'\n'+seq;
+}
+
+app.get('/rnaHybrid/:target/:mimat', async(req,res)=>{
+    const target = req.params.target;
+    const mimat = req.params.mimat;
+    const mirseq = prepareFasta(mimatIdToSequence(mimat));
+    const pos = await get_rnaHybrid(target,mirseq);
+    res.send(pos);
+})
 
 app.get('/seq/:sequence', async (req, res) => {
     let seq = req.params.sequence.toUpperCase();
@@ -175,6 +189,15 @@ function getFocusInMIRFile(mirId){
             res.push(val);
     })
     return res;
+}
+
+function mimatIdToSequence(mimatId){
+    for (let i = 0; i < mimatSequences.length; i++) {
+        const element = mimatSequences[i];
+        if (element[0] != mimatId)
+            continue;
+        return element[2].toUpperCase();
+    }
 }
 
 app.get('/rsidToInfo/:rsId/mimat/:mimat/alterType/:altType', (req, res) => {
