@@ -341,16 +341,25 @@ function filterPathwayFilter(){
     }
 }
 
+function RNAHybridProcessor(){
+    const r = this.responseText;
+    refRnaHybrid.src = 'rnaHybrid/html/' + r.substring(0,r.length-3)+"html";
+}
+
 function showRnaHybrid(gene=null,alen1=null,alen2=null){
     if (alen2 == null){
         grandParent(refRnaHybrid).classList.remove("col-6");
         grandParent(refRnaHybrid).classList.add("col-12");
         grandParent(altRnaHybrid).classList.add("d-none");
     }
-    rnaHybridResult.classList.add("focus")
+    rnaHybridResult.classList.add("focus");
+    let xhr = makeXHR("rna_hybrid","null/null")
+    xhr.addEventListener("load", RNAHybridProcessor);
+    xhr.send();
 }
 
 function unshowRnaHybrid(){
+    rnaHybridResult.src = "rnaHybrid/loading.html"
     rnaHybridResult.classList.remove("focus");
     grandParent(refRnaHybrid).classList.remove("col-12");
     grandParent(refRnaHybrid).classList.add("col-6");

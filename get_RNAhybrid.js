@@ -99,7 +99,7 @@ async function getResultId(target,mirna) {
         }
     };
     opt.body = JSON.stringify(reqObject);
-    console.log(opt.body)
+    // console.log(opt.body)
     const res = await rp(opt);
     // console.log(res.body);
     return res.body;
@@ -151,7 +151,7 @@ async function get_rnaHybrid(target,mirna){
     const fName = makeImgName(target,mirna,position,true);
     write_rnaHybrid_html(rstring,fName);
     fs.writeFile('./assets/rnaHybrid/img/'+fName,buf,()=>{});
-    return position;
+    return fName;
 }
 
 const gs = require('ghostscript4js');
@@ -177,7 +177,7 @@ async function convertPsToPDF(fileName){
     })
 }
 
-module.exports = {get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta}
+module.exports = {get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget, testMirna}
 
 // convertPsToPDF("F13D11.2.1-F13D11.2.1_cel-let-7_1");
 

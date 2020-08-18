@@ -102,7 +102,7 @@ async function getResultFromSequences (seq) {
 
 
 // const mimat = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});
-const allDataLines = readLines("sequence_only.txt");
+const allDataLines = readLines("sequence_only_2.txt");
 
 async function checkSeq(seq){
     const fileName = resultFileName(seq);

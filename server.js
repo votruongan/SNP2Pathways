@@ -3,8 +3,8 @@ var favicon = require('serve-favicon');
 const querystring = require('querystring');
 const fs = require('fs');
 
-const { parseMiRDBData, getMiRDBResult,resultFileName } = require('./get_miRDB');
-const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta } = require('./get_RNAHybrid');
+const { parseMiRDBData, getMiRDBResult,resultFileName} = require('./get_miRDB');
+const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget,testMirna } = require('./get_RNAHybrid');
 
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError, makeRequest, readLines, sleep } = require('./helper');
@@ -26,12 +26,15 @@ function prepareFasta(head,seq){
     return '>'+head+'\n'+seq;
 }
 
-app.get('/rnaHybrid/:target/:mimat', async(req,res)=>{
-    const target = req.params.target;
-    const mimat = req.params.mimat;
+app.get('/rna_hybrid/:target/:mimat', async(req,res)=>{
+    let target = req.params.target;
+    let mimat = req.params.mimat;
     const mirseq = prepareFasta(mimatIdToSequence(mimat));
-    const pos = await get_rnaHybrid(target,mirseq);
-    res.send(pos);
+    if (target == 'null'){
+        target = testTarget; mimat = testMirna;
+    }
+    const fName = await get_rnaHybrid(target,mimat);
+    res.send(fName);
 })
 
 app.get('/seq/:sequence', async (req, res) => {
