@@ -25,8 +25,12 @@ function sequenceToResultId(seq){
 function prepareFasta(head,seq){
     return '>'+head+'\n'+seq;
 }
+async function sss(){
+    await sleep(10000);
+    return "FZD4-201_MIMAT0004608_4044.png";
+}
 
-app.get('/rna_hybrid/:target/:mimat', async(req,res)=>{
+app.get('/rna_hybrid/:target/:mimat', async (req,res)=>{
     let target = req.params.target;
     let mimat = req.params.mimat;
     mimat = "MIMAT0004608"
@@ -37,7 +41,7 @@ app.get('/rna_hybrid/:target/:mimat', async(req,res)=>{
     }
     const fName = await get_rnaHybrid(target,mimat);
     res.send(fName);
-})
+});
 
 app.get('/seq/:sequence', async (req, res) => {
     let seq = req.params.sequence.toUpperCase();

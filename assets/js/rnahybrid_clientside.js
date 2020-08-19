@@ -1,3 +1,4 @@
+const { timers } = require("jquery");
 
 function toggleRnaHybridPanel(panelId,state,isHalfScreen=false){
     if(state){
@@ -15,26 +16,22 @@ function toggleRnaHybridPanel(panelId,state,isHalfScreen=false){
     grandParent(panelId).classList.add("col-6");
     grandParent(panelId).classList.remove("col-12");
     grandParent(panelId).classList.add("d-none");
-    panelId.parentNode.children[3].classList.add("d-none");
 }
 
 async function makeRequestRnaHybrid(gene,mimat,resultPanelId){
     if (gene == null || mimat ==null){
-        gene = "null"; mimat = "null";
+        gene = "null"; mimat = Date.now();
     }
-    let xhr = makeXHR("rna_hybrid",`${gene}/${mimat}`)
-    xhr.addEventListener("load", function (){
+    makeXHR("rna_hybrid",`${gene}/${mimat}`, function (){
         const r = this.responseText;
         resultPanelId.src = 'rnaHybrid/html/' + r.substring(0,r.length-3)+"html";
     });
-    xhr.send();
     console.log("sent rnahybrid reqeuest");
 }
 
 function showRnaHybrid(gene=null,alen1=null,alen2=null){
     if (alen1 == null && alen2 == null ){
-        toggleRnaHybridPanel(refRnaHybrid,true,true);
-        toggleRnaHybridPanel(altRnaHybrid,true,true);
+        toggleRnaHybridPanel(refRnaHybrid,true);
     }
     else{
         toggleRnaHybridPanel(refRnaHybrid,alen1!=null,alen2!=null);

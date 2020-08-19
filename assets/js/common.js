@@ -5,13 +5,23 @@ let raw_result = [[],[]]; // 0: ref, 1: alt
 let result_array = [[],[]]; // 0: ref, 1: alt
 let common_result = [];
 
-function makeXHR(toSend,param=null){
-    url = window.location.href+ toSend;
-    if (param != null)
-        url = url + "/" + param.toString();
+function makeUrl(toSend,param=null){
+  let toUrl = window.location.href+ toSend;
+  if (param != null)
+    toUrl = toUrl + "/" + param.toString();
+  return toUrl;
+}
+
+function makeXHR(toSend,param=null,callback=null){
+    const toUrl = makeUrl(toSend,param);
     let xhr = new XMLHttpRequest();
-    xhr.open("GET",url);
-    return xhr;
+    xhr.open("GET",toUrl,true);
+    if (callback){
+      xhr.addEventListener("load", callback);
+      xhr.send();
+    } else {
+      return xhr;
+    }
 }
 
 function getEle(id){
