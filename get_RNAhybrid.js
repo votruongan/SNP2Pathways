@@ -88,6 +88,7 @@ function splitLongRNAToFasta(rna){
     return header +'\n' + workingArea;
 }
 async function getResultId(target,mirna) {
+    console.log("getResultId");
     const opt = JSON.parse(JSON.stringify(options));
     opt.url += idUrl;
     const reqObject = {
@@ -101,38 +102,30 @@ async function getResultId(target,mirna) {
     opt.body = JSON.stringify(reqObject);
     // console.log(opt.body)
     const res = await rp(opt);
+    console.log("getResultId");
     // console.log(res.body);
     return res.body;
 }
 
-async function getResult(resultId){
+async function getResult(jobId){
+    console.log("getResult");
     const opt = JSON.parse(JSON.stringify(options));
     opt.url += statusUrl;
     opt.headers['Content-Type'] = 'text/plain';
-    opt.body = resultId;
+    opt.body = jobId;
     let res = await rp(opt);
     console.log("rnaHybrid code:", res.body);
     while (res.body.toString() != '600'){
         if (parseInt(res.body.toString()) >= 700){
             return null;
         }
-        await sleep(3000);
+        await sleep(2000);
         res = await rp(opt);
-        console.log("rnaHybrid code:", res.body);
+        console.log(jobId,"- rnaHybrid code:", res.body);
     }
     opt.url = resultUrl;
     const finalRes = await rp(opt);
     return finalRes.body;
-}
-
-async function write_rnaHybrid_html(result,fName){
-    //make html
-    const t1 = "!!! result !!!";
-    const t2 = "!!! image !!!"
-    let htmlStr = fs.readFileSync("./assets/rnaHybrid/template.html",{encoding:'utf-8'});
-    htmlStr = htmlStr.replace(t1,result);
-    htmlStr = htmlStr.replace(t2,'../img/'+fName);
-    fs.writeFile('./assets/rnaHybrid/html/'+fName.substr(0,fName.length-3)+"html",htmlStr,()=>{});
 }
 
 async function get_rnaHybrid(target,mirna){
@@ -153,6 +146,16 @@ async function get_rnaHybrid(target,mirna){
     fs.writeFile('./assets/rnaHybrid/img/'+fName,buf,()=>{});
     return fName;
 }
+async function write_rnaHybrid_html(result,fName){
+    //make html
+    const t1 = "!!! result !!!";
+    const t2 = "!!! image !!!"
+    let htmlStr = fs.readFileSync("./assets/rnaHybrid/template.html",{encoding:'utf-8'});
+    htmlStr = htmlStr.replace(t1,result);
+    htmlStr = htmlStr.replace(t2,'../img/'+fName);
+    fs.writeFile('./assets/rnaHybrid/html/'+fName.substr(0,fName.length-3)+"html",htmlStr,()=>{});
+}
+
 
 const gs = require('ghostscript4js');
 

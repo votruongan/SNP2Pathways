@@ -8,6 +8,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/fonts.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" >
+	<script src="js/run_on_page_init.js"></script>
     <!-- <link href="css/all.css" rel="stylesheet" > -->
     <!-- <link href="css/normal.css" rel="stylesheet" > -->
 </head>
@@ -55,14 +56,13 @@
 			<select class="form-control col-8 text-left" id="alterType">
 			  </select>
 		</div>
-		
 		<!-- Choose disease -->
 				<div class="row align-items-center mt-3">
 					<p class="col-5 pl-4 mt-4 mr-0 pr-0">Pathways filter:</p>
 					<input class="col-6 form-control" id="filter_pathway_filter"></input>
 				</div>
 				<div class="justify-content-center d-flex mb-2">
-					<div class="form-control p-0"  style="width:90%; height: 256px; overflow: auto;">
+					<div class="form-control p-0"  style="width:90%; height: 281px; overflow: auto;">
 					<table class="table" id="pathway_filter_box">
 						  <tbody>				   
 							<tr>
@@ -174,8 +174,8 @@
 		<div class="py-3 h-100">
 		<div class="h-100">
 			<div class="row h-100">
-			<div class="col-6 p-0">
-			<div class="btn w-100 bg-white h-100 pr-1">
+			<div class="col-6 p-0 pr-1">
+			<div class="btn w-100 bg-white h-100">
 				<p>Sequence: CCUCUGAAAUUCAGUUCUUCAG</p>
 				<p>Target gene: FZD4</p>
 				<iframe class="border-0 w-100 h-75" src="rnaHybrid/loading.html" title="rnaHybrid" id="refRnaHybrid"></iframe>
@@ -183,7 +183,8 @@
 			</div>
 			<div class="col-6 p-0 pl-1">
 			<div class="btn w-100 bg-white h-100">
-				<p></p>
+				<p>Sequence: CCUCUGAAAUUCAGUUCUUCAG</p>
+				<p>Target gene: FZD4</p>
 				<iframe class="border-0 w-100 h-75" src="rnaHybrid/loading.html" title="rnaHybrid" id="altRnaHybrid"></iframe>
 			</div>
 			</div>
@@ -195,8 +196,9 @@
 <footer>
 	<!-- <p>Một sản phẩm của PTUDW-17TN-Nhom16</p> -->
 </footer>
-<script defer src="js/suggest_input.js"></script>
 <script defer src="js/common.js"></script>
+<script defer src="js/suggest_input.js"></script>
 <script defer src="js/index_script.js"></script>
+<script defer src="js/rnahybrid_clientside.js"></script>
 </body>
 </html>

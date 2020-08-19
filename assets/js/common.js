@@ -71,3 +71,18 @@ function changeHeight(x1, y1, x2, y2) {
     setGrandParentHeight(alenC_result,(cH + dy) + "px");
     setGrandParentHeight(alenG_result,(cH + dy) + "px");
 }
+
+function setObjectVisiblity(obj, value, visibleClass="d-block"){
+  if (value) {
+      obj.classList.remove("d-none");
+      obj.classList.add(visibleClass);
+      return;
+  }
+  obj.classList.remove(visibleClass);
+  obj.classList.add("d-none");
+}
+
+function setObjectActive(obj, value){
+  if (value) obj.removeAttribute("disabled")
+  else obj.setAttribute("disabled","true")
+}

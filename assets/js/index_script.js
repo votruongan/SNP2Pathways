@@ -1,10 +1,5 @@
 
 // let isUsing = true;
-let qIndex = window.location.href.indexOf("?")
-console.log(window.location.href,qIndex)
-if (qIndex > 0){
-    window.location.href = "/";
-}
 let mimatCode = "";
 let allRsSuggest = [];
 function usingMiRNA(){
@@ -52,7 +47,7 @@ function makeElement(type, data, options=null){
         r.innerHTML = data;
     }
     if (style != null){
-        console.log("Making class for ",type,style)
+        // console.log("Making class for ",type,style)
         r.classList.add(style);
     }
     return r;
@@ -127,16 +122,6 @@ function parseDiseasesInAll(arr){
     return arr;
 }
 
-function setLoadingPanel(val){
-    if (val){
-        loadingPanel.classList.remove("d-none");
-        loadingPanel.classList.add("d-flex");
-        return;
-    }
-    loadingPanel.classList.remove("d-flex");
-    loadingPanel.classList.add("d-none");
-}
-
 function setAlenTableHeight(height){
     setGrandParentHeight(alenG_result,height);
     setGrandParentHeight(alenC_result,height);
@@ -161,7 +146,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     if (isResolveForMIMAT){
         console.log('isResolveForMIMAT')
         tableDisplayResult(alenC_result,data);
-        setLoadingPanel(false);
+        setObjectVisiblity(loadingPanel, false, "d-flex");
         setGrandParentHeight(common_result_display,"100px");
         setAlenTableHeight('450px');
         return;
@@ -194,7 +179,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     if (common_result.length == 0){
         setAlenTableHeight('450px');
     }
-    setLoadingPanel(false);
+    setObjectVisiblity(loadingPanel, false, "d-flex");
 }
 
 function setAlenC(data,isbegin=false){
@@ -303,7 +288,7 @@ async function sendRS(){
     const path = `rsidToInfo/${rsCode}/mimat/${mimatCode}/alterType/${alter}`;
     // console.log(path);
     let xhr = makeXHR(path);
-    setLoadingPanel(true);
+    setObjectVisiblity(loadingPanel, true, "d-flex");
     xhr.addEventListener("load", rsReturnProcessor);
     xhr.send();
     console.log("sent rs request", path);
@@ -311,7 +296,7 @@ async function sendRS(){
 
 function applyPathwayFilter(display=true){
     pathway_filter = [];
-    setLoadingPanel(true);
+    setObjectVisiblity(loadingPanel, true, "d-flex");
     for (let i = 0; i < all_pathway_filter.length; i++) {
         const res = getEle("path_select_"+i).checked;
         if (res == true){//(res == false || res == null){
@@ -341,30 +326,11 @@ function filterPathwayFilter(){
     }
 }
 
-function RNAHybridProcessor(){
-    const r = this.responseText;
-    refRnaHybrid.src = 'rnaHybrid/html/' + r.substring(0,r.length-3)+"html";
-}
-
-function showRnaHybrid(gene=null,alen1=null,alen2=null){
-    if (alen2 == null){
-        grandParent(refRnaHybrid).classList.remove("col-6");
-        grandParent(refRnaHybrid).classList.add("col-12");
-        grandParent(altRnaHybrid).classList.add("d-none");
-    }
-    rnaHybridResult.classList.add("focus");
-    let xhr = makeXHR("rna_hybrid","null/null")
-    xhr.addEventListener("load", RNAHybridProcessor);
-    xhr.send();
-}
-
-function unshowRnaHybrid(){
-    rnaHybridResult.src = "rnaHybrid/loading.html"
-    rnaHybridResult.classList.remove("focus");
-    grandParent(refRnaHybrid).classList.remove("col-12");
-    grandParent(refRnaHybrid).classList.add("col-6");
-    grandParent(altRnaHybrid).classList.remove("d-none");
-}
+//DELETABLE
+// function RNAHybridProcessor(resultPanelId){
+//     const r = this.responseText;
+//     resultPanelId.src = 'rnaHybrid/html/' + r.substring(0,r.length-3)+"html";
+// }
 
 function makePathwayCheck(pName,index){
     const temp = `<td class="px-3"><input type="checkbox" id="path_select_${index}" checked></input></td><td class="col-11 px-0">${pName}</td>`;
@@ -379,21 +345,6 @@ function initPathwayFilter(){
         const line = makePathwayCheck(val,index);
         pathway_filter_box.appendChild(line);
     })
-}
-
-function setObjectVisiblity(obj, value){
-    if (value) {
-        obj.classList.remove("d-none");
-        obj.classList.add("d-block");
-        return;
-    }
-    obj.classList.remove("d-block");
-    obj.classList.add("d-none");
-}
-
-function setObjectActive(obj, value){
-    if (value) obj.removeAttribute("disabled")
-    else obj.setAttribute("disabled","true")
 }
 
 function init(){
@@ -434,4 +385,3 @@ processButton.addEventListener("click",sendRS);
 deselectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(false)});
 selectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(true)});
 apply_pathway_filter.addEventListener("click",applyPathwayFilter);
-closeRnaHybrid.addEventListener("click",unshowRnaHybrid);

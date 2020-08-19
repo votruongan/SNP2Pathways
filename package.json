@@ -1,7 +1,7 @@
 {
-  "name": "snp2pathway",
+  "name": "funcmirsnp",
   "version": "1.0.0",
-  "description": "packages for snp2pathway",
+  "description": "packages for funcmirsnp",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -29,7 +29,9 @@ function prepareFasta(head,seq){
 app.get('/rna_hybrid/:target/:mimat', async(req,res)=>{
     let target = req.params.target;
     let mimat = req.params.mimat;
-    const mirseq = prepareFasta(mimatIdToSequence(mimat));
+    mimat = "MIMAT0004608"
+    const mifasta = prepareFasta(mimat,mimatIdToSequence(mimat));
+    console.log(mifasta);
     if (target == 'null'){
         target = testTarget; mimat = testMirna;
     }
@@ -105,7 +107,7 @@ function uniqueMimatNamePos(allLines){
 
 const mimatPos = uniqueMimatNamePos(allDataLines);
 
-console.log("LOADED ",allDataLines.length," data line");
+console.log("LOADED ",allDataLines.length," data line in rsonly");
 const recommendMIR = mimatPos.map((a)=>{return a.mimat});
 const recommendHSA = mimatPos.map((a)=>{return a.hsa});
 const mimatSequences = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});

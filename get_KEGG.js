@@ -32,7 +32,7 @@ allOfflineKEGG.forEach((val)=>{
     hashedMap[h].push(val);
 });
 
-console.log("LOADED",allOfflineKEGG.length,"offline KEGG -",allOfflineKEGG[0].length,"data colum");
+console.log("LOADED",allOfflineKEGG.length,"offline KEGG - gene_pathways",allOfflineKEGG[0].length,"data colum");
 
 
 var headers = {
