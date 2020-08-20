@@ -11,6 +11,8 @@ let all_pathway_filter = [];
 let pathway_filter = [];
 let isResolveForMIMAT = false;
 
+let rsProccessTimestamp = null;
+
 function toggleHandler(ch,seq){
     let index = (ch == "C")?(0):(1);
     if(alenResHandler[index] == null){
@@ -201,7 +203,7 @@ function rsReturnProcessor(){
     let obj = JSON.parse(this.responseText);
     let realObj = JSON.parse(this.responseText);
     console.log(obj);
-    alenC_display.innerHTML = realObj.alenC;
+    alenC_display.innerText = realObj.alenC;
     alenC_result.textContent = '';
     alenG_result.textContent = '';
     common_result_display.textContent = '';
@@ -226,7 +228,6 @@ function rsReturnProcessor(){
 
 //rs ids returned from the mir
 function mirReturnProcessor(){
-    setObjectActive(rsid,false);
     let obj = JSON.parse(this.responseText);
     if (!obj) return;
     allRsSuggest = obj.rsidSuggest;
@@ -239,8 +240,8 @@ function mirReturnProcessor(){
 
 //suggest alt. type from rsid
 function suggestAlternateFromRs(){
-    console.log('suggestAlternateFromRs');
-    console.log(rsid.value);
+    // console.log('suggestAlternateFromRs');
+    // console.log(rsid.value);
     setObjectActive(alterType,true);
     const rsVal = rsid.value;
     // loop through rsSuggest
@@ -253,13 +254,17 @@ function suggestAlternateFromRs(){
     if (altTypes == null)
         setTimeout(suggestAlternateFromRs,150);
     makeAlternateSuggestions(altTypes);
-    return console.log( altTypes);
+    // return console.log( altTypes);
 }
 
 
 async function sendMIR(){
     let mircode = miRNAHeader.value + getEle("miRNA").value;
     const m = miRNAHeader.value;
+    rsid.value = '';
+    alterType.value = '';
+    setObjectActive(rsid,false);
+    setObjectActive(alterType,false);
     // return console.log(mircode);
     const reqPath = (m == "MIMAT")?("suggestFromMIMAT"):("suggestFromHSA");
     console.log(reqPath,mircode);
@@ -289,6 +294,8 @@ async function sendRS(){
     // console.log(path);
     let xhr = makeXHR(path);
     setObjectVisiblity(loadingPanel, true, "d-flex");
+    refSeqId = mimatCode;
+    altSeqId = (isResolveForMIMAT)?(mimatCode):(rsCode);
     xhr.addEventListener("load", rsReturnProcessor);
     xhr.send();
     console.log("sent rs request", path);

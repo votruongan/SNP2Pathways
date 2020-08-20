@@ -4,11 +4,14 @@ const pathway_link_prefix = "https://www.kegg.jp/kegg-bin/show_pathway?";
 let raw_result = [[],[]]; // 0: ref, 1: alt
 let result_array = [[],[]]; // 0: ref, 1: alt
 let common_result = [];
+let refSeqId = null;
+let altSeqId = null;
 
 function makeUrl(toSend,param=null){
   let toUrl = window.location.href+ toSend;
   if (param != null)
     toUrl = toUrl + "/" + param.toString();
+  console.log(toUrl);
   return toUrl;
 }
 

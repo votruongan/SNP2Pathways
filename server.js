@@ -25,20 +25,31 @@ function sequenceToResultId(seq){
 function prepareFasta(head,seq){
     return '>'+head+'\n'+seq;
 }
+
+function isEmptyString(target){
+    return target == null || target == '';
+}
+
 async function sss(){
     await sleep(10000);
     return "FZD4-201_MIMAT0004608_4044.png";
 }
 
-app.get('/rna_hybrid/:target/:mimat', async (req,res)=>{
+app.get('/rna_hybrid/:target/:mimat/:support', async (req,res)=>{
     let target = req.params.target;
     let mimat = req.params.mimat;
-    mimat = "MIMAT0004608"
-    const mifasta = prepareFasta(mimat,mimatIdToSequence(mimat));
-    console.log(mifasta);
-    if (target == 'null'){
+    let sup = req.params.support;
+    if ( isEmptyString(target) || isEmptyString(mimat)){
         target = testTarget; mimat = testMirna;
     }
+    //resolve for rs sequence
+    if (mimat[0] + mimat[1] == "rs"){
+        const l = allDataLines[findRsIndexInAllDataLines(mimat,sup)]
+        mimat = prepareFasta(mimat,l[13]);
+    } else {
+        mimat = prepareFasta(mimat,mimatIdToSequence(mimat));
+    }    
+    console.log(mimat);
     const fName = await get_rnaHybrid(target,mimat);
     res.send(fName);
 });
@@ -185,20 +196,20 @@ app.get('/result/:resid', async (req, res) => {
     res.send(resObj);
 })
 
-function getFocusInMIRFile(mirId){
-    const fName = `./mirnadata/${mirId}/${mirId}.tsv`;
-    const check = fs.existsSync(fName);
-    if (check == false)
-        return null
-    let res = [];
-    const r = readLines(fName).map((val) => {return val.split("\t");});
-    r.splice(0,1);
-    r.forEach((val)=>{
-        if (val[2]!=".")
-            res.push(val);
-    })
-    return res;
-}
+// function getFocusInMIRFile(mirId){
+//     const fName = `./mirnadata/${mirId}/${mirId}.tsv`;
+//     const check = fs.existsSync(fName);
+//     if (check == false)
+//         return null
+//     let res = [];
+//     const r = readLines(fName).map((val) => {return val.split("\t");});
+//     r.splice(0,1);
+//     r.forEach((val)=>{
+//         if (val[2]!=".")
+//             res.push(val);
+//     })
+//     return res;
+// }
 
 function mimatIdToSequence(mimatId){
     for (let i = 0; i < mimatSequences.length; i++) {
@@ -209,6 +220,31 @@ function mimatIdToSequence(mimatId){
     }
 }
 
+function findRsIndexInAllDataLines(rsId, mId=null, alterType=null){
+    // resolve for specified ref. SNP and its alternate type
+    let start = 0, end = allDataLines.length;
+    //fast calc the start and end pos with provided mimat id
+    if (mId != null){
+        start = mimatPosInfo(mId);
+        end = start.endPosition;
+        start = start.basePosition;
+    }
+    let ind = -1;
+    // find the rs in all datalines
+    for (let i = start; i < end; i++) {
+        const ele = allDataLines[i]
+        if (ele[2] != rsId){
+            continue;
+        } else {
+            if (alterType){
+                if (ele[3] != alterType[0] || ele[4] != alterType[1])
+                    continue;
+            }
+        }
+        ind = i; break  
+    }
+    return ind;
+}
 app.get('/rsidToInfo/:rsId/mimat/:mimat/alterType/:altType', (req, res) => {
     let rsId = req.params.rsId;
     let mId = req.params.mimat;
@@ -229,15 +265,7 @@ app.get('/rsidToInfo/:rsId/mimat/:mimat/alterType/:altType', (req, res) => {
     }
 
     // resolve for specified ref. SNP and its alternate type
-    let start = mimatPosInfo(mId); const end = start.endPosition;
-    start = start.basePosition;
-    let ind = -1;
-    for (let i = start; i < end; i++) {
-        const ele = allDataLines[i]
-        if (ele[2] == rsId && ele[3] == alterType[0] && ele[4] == alterType[1]){
-            ind = i; break
-        }
-    }
+    let ind = findRsIndexInAllDataLines(rsId,mId);
     let obj = null;
     if (ind != -1){
         let alenC = allDataLines[ind][12].toUpperCase();

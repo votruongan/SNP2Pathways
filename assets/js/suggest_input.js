@@ -44,6 +44,7 @@ function makeAltSuggestOption(obj){
 
 function makeAlternateSuggestions(altArray){
   let str = "";
+  if (altArray == null) return setObjectActive(alterType,false);
   for (let i = 0; i < altArray.length; i++) {
     const element = altArray[i];
     str = str + makeAltSuggestOption(element);

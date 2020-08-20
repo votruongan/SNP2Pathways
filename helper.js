@@ -33,6 +33,7 @@ async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy
         port: parseInt(prox[1]),
         path: fullPath,
         method: customOptions.method || 'POST',
+        timeout: 5000,
         headers: {
           Host: hostName,
           'Content-Type': 'application/x-www-form-urlencoded',
