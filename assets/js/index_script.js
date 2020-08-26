@@ -48,6 +48,9 @@ function makeElement(type, data, options=null){
     } else {
         r.innerHTML = data;
     }
+    if (options && options.type !=null){
+        r.setAttribute("type", options.type);
+    }
     if (style != null){
         // console.log("Making class for ",type,style)
         r.classList.add(style);
@@ -63,6 +66,7 @@ function makeResultRow(data){
     var mainNode = document.createElement("tr");
     mainNode.appendChild(makeElement("td",data.score,{onclick:showRnaHybrid}));
     mainNode.appendChild(makeElement("td",data.gene,{link:data.gLink, onclick:function(ev){ev.stopPropagation();}}));
+    mainNode.appendChild(makeElement("input",data.nmFile,{type:"hidden"}));
     const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
     mainNode.appendChild(makeElement("td",ds,{style:"text-left"}));
     // mainNode.onclick = showRnaHybrid; 
@@ -290,6 +294,7 @@ async function sendRS(){
         rsCode = 'null';
         isResolveForMIMAT = true;
     }
+    alenG_display.innerText = "";
     const path = `rsidToInfo/${rsCode}/mimat/${mimatCode}/alterType/${alter}`;
     // console.log(path);
     let xhr = makeXHR(path);

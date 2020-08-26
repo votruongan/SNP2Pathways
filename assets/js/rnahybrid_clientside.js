@@ -34,7 +34,7 @@ async function makeRequestRnaHybrid(gene,mimat,resultPanelId){
 function showRnaHybrid(){
     const panelId = grandParent(this).id;
     const pIdPrefix = panelId.substring(0,panelId.length - 6);
-    const gene = this.parentNode.children[1].children[0].innerText;
+    const gene = this.parentNode.children[2].innerText;
     let alen1 = null, alen2 = null;
     if (panelId == "common_result_display"){        
         alen1 = mimatCode;      

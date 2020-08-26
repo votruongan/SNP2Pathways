@@ -4,7 +4,7 @@ const querystring = require('querystring');
 const fs = require('fs');
 
 const { parseMiRDBData, getMiRDBResult,resultFileName} = require('./get_miRDB');
-const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget,testMirna } = require('./get_RNAHybrid');
+const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget,testMirna, getSequenceFromNM } = require('./get_RNAHybrid');
 
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError, makeRequest, readLines, sleep } = require('./helper');
@@ -23,6 +23,7 @@ function sequenceToResultId(seq){
 }
 
 function prepareFasta(head,seq){
+    seq = seq.replace(/(?:\r\n|\r|\n)/g,"");
     return '>'+head+'\n'+seq;
 }
 
@@ -36,21 +37,26 @@ async function sss(){
 }
 
 app.get('/rna_hybrid/:target/:mimat/:support', async (req,res)=>{
-    let target = req.params.target;
-    let mimat = req.params.mimat;
-    let sup = req.params.support;
+    const target = req.params.target;
+    const mimat = req.params.mimat;
+    const sup = req.params.support;
+    console.log("get rnaHybrid with: ",target,mimat,sup);
     if ( isEmptyString(target) || isEmptyString(mimat)){
         target = testTarget; mimat = testMirna;
     }
+    let targetSubFasta = null;
+    let mimatSubFasta = null;
+    if (target[0]+target[1] != "NM") return null;
+    targetSubFasta = prepareFasta(target,getSequenceFromNM(target));
     //resolve for rs sequence
     if (mimat[0] + mimat[1] == "rs"){
-        const l = allDataLines[findRsIndexInAllDataLines(mimat,sup)]
-        mimat = prepareFasta(mimat,l[13]);
+        const line = allDataLines[findRsIndexInAllDataLines(mimat,sup)]
+        mimatSubFasta = prepareFasta(mimat,line[13]);
     } else {
-        mimat = prepareFasta(mimat,mimatIdToSequence(mimat));
+        mimatSubFasta = prepareFasta(mimat,mimatIdToSequence(mimat));
     }    
-    console.log(mimat);
-    const fName = await get_rnaHybrid(target,mimat);
+    console.log(mimatSubFasta);
+    const fName = await get_rnaHybrid(targetSubFasta,mimatSubFasta);
     res.send(fName);
 });
 
@@ -93,7 +99,7 @@ app.get('/seq/:sequence', async (req, res) => {
 
     makeRequest(options,(chunk) => {
         console.log("CHUNK:",chunk);
-        getMiRDBResult(chunk,seq,null);
+        getMiRDBResult(chunk,seq);
     },en,true);
     //send the result back to client
     res.send(obj);
@@ -190,7 +196,7 @@ app.get('/result/:resid', async (req, res) => {
     const resObj = JSON.parse(checkRes);
     if (resObj && checkRes.length > 0){
         for (let i = 0; i < resObj.length; i++) {
-            resObj[i].diseases = await getKEGGDataOffline(resObj[i].geneId);
+            resObj[i].diseases = await getKEGGDataOffline(resObj[i].gId);
         }
     }
     res.send(resObj);

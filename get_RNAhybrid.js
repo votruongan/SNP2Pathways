@@ -10,6 +10,27 @@ const testTarget = '>FZD4-201 utr3:protein_coding\nGGCTAGTCAGCCTCCATGCTTTCTTCATT
 const testMirna = ">MIMAT0004608\nCCUGUGAAAUUCAGUUCUUCAG"
 
 
+function main(){
+    const res = getSequenceFromNM('NM_152780');
+    console.log(res);
+}
+
+// main()
+
+function getSequenceFromNM(nmId){
+    let res = null;
+    const path = './rnaHybrid/three_prime_utrs_fastas/'+nmId+'.fa'
+    try{
+        res = fs.readFileSync(path,{encoding:"utf-8"});
+    } catch(e){
+        console.log(path,"is not existing");
+        return null;
+    }
+    res = res.substr(res.indexOf('\n'));
+    return res;
+}
+
+
 
 function firstSplitter(str){
     let ind = str.indexOf(' ');
@@ -180,7 +201,7 @@ async function convertPsToPDF(fileName){
     })
 }
 
-module.exports = {get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget, testMirna}
+module.exports = {get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget, testMirna, getSequenceFromNM}
 
 // convertPsToPDF("F13D11.2.1-F13D11.2.1_cel-let-7_1");
 
