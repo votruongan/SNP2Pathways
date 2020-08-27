@@ -107,12 +107,27 @@ body {
   cursor: pointer; /* Add a pointer on hover */
 }
 
-.overlay-button{
-	top:60% !important;
-	left:85% !important;
+@media only screen and (max-width: 450px) {
+  .overlay-button{
+    top:60% !important;
+    left:85% !important;
+    width:15% !important;
+  }
 }
 
-tr:hover{
+@media only screen and (max-width: 2450px) {
+  .overlay-button{
+    top:60% !important;
+    left:95% !important;
+    width:5% !important;
+  }
+}
+
+tr td:first-child{
+  background-color: #F3F3F3;
+}
+
+tr td:first-child:hover{
   background-color: cyan;
 }
 

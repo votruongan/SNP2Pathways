@@ -13,6 +13,8 @@ let isResolveForMIMAT = false;
 
 let rsProccessTimestamp = null;
 
+setObjectVisiblity(btnToggleRemove,false);
+
 function toggleHandler(ch,seq){
     let index = (ch == "C")?(0):(1);
     if(alenResHandler[index] == null){
@@ -42,7 +44,7 @@ function makeElement(type, data, options=null){
     if (link != null){
         a = document.createElement('a');
         a.innerText = data;
-        a.href = link;
+        a.href = 'https://www.ncbi.nlm.nih.gov/gene/' + link;
         a.target = "_blank";
         r.appendChild(a);
     } else {
@@ -65,7 +67,7 @@ function makeDiseaseDisplay(val){
 function makeResultRow(data){
     var mainNode = document.createElement("tr");
     mainNode.appendChild(makeElement("td",data.score,{onclick:showRnaHybrid}));
-    mainNode.appendChild(makeElement("td",data.gene,{link:data.gLink, onclick:function(ev){ev.stopPropagation();}}));
+    mainNode.appendChild(makeElement("td",data.gene,{link:data.gId, onclick:function(ev){ev.stopPropagation();}}));
     mainNode.appendChild(makeElement("input",data.nmFile,{type:"hidden"}));
     const ds = data.diseases.map(val=>makeDiseaseDisplay(val)).join("\n");
     mainNode.appendChild(makeElement("td",ds,{style:"text-left"}));
@@ -81,7 +83,7 @@ function tableDisplayResult(tableId,arr){
     tableId.textContent="";
     if (arr.length == 0){
         setGrandParentHeight(tableId,"100px");
-        tableId.innerHTML = "<tr><td></td><td>No result</td></tr>";
+        tableId.innerHTML = "<th><td></td><td>No result</td></th>";
         return;
     }
     setGrandParentHeight(tableId,"290px");
@@ -133,11 +135,11 @@ function setAlenTableHeight(height){
     setGrandParentHeight(alenC_result,height);
 }
 
-function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
+function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,removeSimilar=false){
     const oppositeIndex = (currentIndex == 1)?(0):(1);
     clearInterval(alenResHandler[currentIndex]);
     alenResHandler[currentIndex]= null;
-    resultDisplayer.innerHTML = "<tr><td></td><td>No result</td></tr>";
+    resultDisplayer.innerHTML = "<th><td></td><td>No result</td></th>";
     if (content == "null" || content == null || content == "")
         return;
     let data = JSON.parse(content);
@@ -152,15 +154,18 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     if (isResolveForMIMAT){
         console.log('isResolveForMIMAT')
         tableDisplayResult(alenC_result,data);
+        clearTimeout(notiTimeHandle);
         setObjectVisiblity(loadingPanel, false, "d-flex");
         setGrandParentHeight(common_result_display,"100px");
         setAlenTableHeight('450px');
+        setObjectVisiblity(delay15Seconds,false);
         return;
     }
     if (result_array[oppositeIndex].length <= 0){
         result_array[currentIndex] = data;
         return;
     }
+    setObjectVisiblity(btnToggleRemove,true);
     let i = 0;
     common_result = [];
     while(i < data.length){
@@ -169,8 +174,10 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
             const rele = result_array[oppositeIndex][j];
             if (dele.gene == rele.gene){
                 common_result.push(dele);
-                result_array[oppositeIndex].splice(j,1);
-                data.splice(--i,1);
+                if (removeSimilar){
+                    result_array[oppositeIndex].splice(j,1);
+                    data.splice(--i,1);
+                }
                 break;
             }
         }           
@@ -185,28 +192,51 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases){
     if (common_result.length == 0){
         setAlenTableHeight('450px');
     }
+    if (notiTimeHandle){
+        clearTimeout(notiTimeHandle);
+        notiTimeHandle = null;
+    }
+    setObjectVisiblity(delay15Seconds,false);
     setObjectVisiblity(loadingPanel, false, "d-flex");
 }
 
-function setAlenC(data,isbegin=false){
+function setAlenC(data,isbegin=false, removeSimilar=false){
     if (data==null || data==""){
         console.log("data is null - alenResHandler:",alenResHandler);
         return;
     }
-    setAlenResult(data,alenG_result,0,parseDiseases=isbegin);
+    setAlenResult(data,alenG_result,0,parseDiseases=isbegin, removeSimilar);
 }
-function setAlenG(data,isbegin=false){
+function setAlenG(data,isbegin=false, removeSimilar=false){
     if (data==null || data==""){
         console.log("data is null - alenResHandler:",alenResHandler);
         return;
     }
-    setAlenResult(data,alenG_result,1,parseDiseases=isbegin);
+    setAlenResult(data,alenG_result,1,parseDiseases=isbegin,removeSimilar);
 }
+
+let isRemoveSimilar = false;
+function toggleRemoveSimilarGene(){
+    isRemoveSimilar = !isRemoveSimilar;
+    setObjectVisiblity(loadingPanel,true,"d-flex");
+    btnToggleRemove.innerText = (isRemoveSimilar)?("Keep same target genes"):("Remove same target genes");
+    resetResultDisplay();
+    if (raw_result[0].length > 0)
+        setAlenC(JSON.stringify(raw_result[0]),false,isRemoveSimilar);
+    if (raw_result[1].length > 0)
+        setAlenG(JSON.stringify(raw_result[1]),false,isRemoveSimilar);
+}
+
+let notiTimeHandle = null;
 
 function rsReturnProcessor(){
     let obj = JSON.parse(this.responseText);
     let realObj = JSON.parse(this.responseText);
     console.log(obj);
+    notiTimeHandle = setTimeout(()=>{
+        setObjectVisiblity(loadingPanel,false,"d-flex");
+        setObjectVisiblity(notificationPanel,true,"focus");
+    },10*60*1000);
     alenC_display.innerText = realObj.alenC;
     alenC_result.textContent = '';
     alenG_result.textContent = '';
@@ -295,9 +325,13 @@ async function sendRS(){
         isResolveForMIMAT = true;
     }
     alenG_display.innerText = "";
+    setTimeout(()=>{
+        setObjectVisiblity(delay15Seconds,true);
+    },15*1000)
     const path = `rsidToInfo/${rsCode}/mimat/${mimatCode}/alterType/${alter}`;
     // console.log(path);
     let xhr = makeXHR(path);
+    setObjectVisiblity(btnToggleRemove, false, "d-flex");
     setObjectVisiblity(loadingPanel, true, "d-flex");
     refSeqId = mimatCode;
     altSeqId = (isResolveForMIMAT)?(mimatCode):(rsCode);
@@ -345,7 +379,7 @@ function filterPathwayFilter(){
 // }
 
 function makePathwayCheck(pName,index){
-    const temp = `<td class="px-3"><input type="checkbox" id="path_select_${index}" checked></input></td><td class="col-11 px-0">${pName}</td>`;
+    const temp = `<td class="px-3"><input type="checkbox" id="path_select_${index}" checked></input></td><td class="col-11 pl-2 pr-0">${pName}</td>`;
     return makeElement('tr',temp);
 }
 

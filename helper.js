@@ -44,11 +44,17 @@ async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy
     const myReq = http.request(options, (res) => {
         console.log(`IP: ${prox[0]}STATUS: ${res.statusCode}`);
         // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+        if (res.statusCode >= 500){
+            isOnWarning = true;
+            setTimeout(()=>{isOnWarning = false},1*60*1000)
+            console.error(`Warning from site detected`);
+            throw new SiteWarningError(customOptions.sequence);
+        }
         res.setEncoding('utf8');
         res.on('data', (chunk)=>{
-            if (chunk.includes("Warning:")){
+            if (chunk.includes("Warning:") || chunk.includes("Sorry, we're having trouble loading the page")){
                 isOnWarning = true;
-                setTimeout(()=>{isOnWarning = false},1*60*1000)
+                setTimeout(()=>{isOnWarning = false},2*60*1000)
                 console.error(`Warning from site detected`);
                 throw new SiteWarningError(customOptions.sequence);
             }

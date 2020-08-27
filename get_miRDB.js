@@ -29,7 +29,7 @@ async function parseMirdbNew(data, sequence,elementCallback=null){
             obj.gId = getValue(shorts[3]);
             obj.gene = getValue(shorts[4]);
             obj.nmFile = getValue(shorts[5]);
-            obj.gLink = "https://www.genome.jp/dbget-bin/www_bget?hsa:"+ obj.gId;
+            // obj.gLink = "https://www.genome.jp/dbget-bin/www_bget?hsa:"+ obj.gId;
         }
         if (parseInt(obj.score) < 50)
             break;

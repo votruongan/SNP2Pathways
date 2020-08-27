@@ -17,13 +17,13 @@ function toggleRnaHybridPanel(panelId,state,isHalfScreen=false){
     grandParent(panelId).classList.add("d-none");
 }
 
-async function makeRequestRnaHybrid(gene,mimat,resultPanelId){
-    if (gene == null || mimat ==null){
+async function makeRequestRnaHybrid(nmId,mimat,resultPanelId,geneName=null){
+    if (nmId == null || mimat ==null){
         return;
     }
     resultPanelId.parentNode.children[0].innerText = "Sequence: " + mimat;
-    resultPanelId.parentNode.children[1].innerText = "Target gene: " + gene;
-    makeXHR("rna_hybrid",`${gene}/${mimat}/${refSeqId}`, function (){
+    resultPanelId.parentNode.children[1].innerText = `Target gene: ${geneName} (${nmId})`;
+    makeXHR("rna_hybrid",`${nmId}/${mimat}/${refSeqId}`, function (){
         const r = this.responseText;
         resultPanelId.src = 'rnaHybrid/html/' + r.substring(0,r.length-3)+"html";
     });
@@ -34,7 +34,8 @@ async function makeRequestRnaHybrid(gene,mimat,resultPanelId){
 function showRnaHybrid(){
     const panelId = grandParent(this).id;
     const pIdPrefix = panelId.substring(0,panelId.length - 6);
-    const gene = this.parentNode.children[2].innerText;
+    const nmId = this.parentNode.children[2].innerText;
+    const gene = this.parentNode.children[1].children[0].innerText;
     let alen1 = null, alen2 = null;
     if (panelId == "common_result_display"){        
         alen1 = mimatCode;      
@@ -48,10 +49,10 @@ function showRnaHybrid(){
         console.log(panelId, pIdPrefix)
         alen1 = (pIdPrefix == "alenC_")?(refSeqId):(altSeqId)
     }
-    console.log(gene,alen1,alen2);
+    console.log(nmId,alen1,alen2);
     rnaHybridResult.classList.add("focus");
-    makeRequestRnaHybrid(gene,alen1,refRnaHybrid);
-    makeRequestRnaHybrid(gene,alen2,altRnaHybrid);
+    makeRequestRnaHybrid(nmId,alen1,refRnaHybrid,gene);
+    makeRequestRnaHybrid(nmId,alen2,altRnaHybrid,gene);
 }
 
 function unshowRnaHybrid(){
