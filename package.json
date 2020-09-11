@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "ghostscript4js": "^3.2.1",
     "jquery": "^3.5.1",
     "jsdom": "^16.2.2",
     "lodash": "^4.17.20",

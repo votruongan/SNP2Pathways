@@ -173,14 +173,14 @@ async function write_rnaHybrid_html(result,fName){
 }
 
 
-const gs = require('ghostscript4js');
+// const gs = require('ghostscript4js');
 
 async function convertPsToPDF(fileName){
     const inpFile = `./rnaHybrid/${fileName}.ps`
     fs.exists(inpFile,()=>{
         try {
             // Take decision based on Ghostscript version
-            const version = gs.version()
+            // const version = gs.version()
             // redo the bounding box
             const content = fs.readFileSync(inpFile,{encoding:'utf-8'}).split('\n');
             const toReplace = content.indexOf('%%BoundingBox: (atend)');
@@ -188,7 +188,7 @@ async function convertPsToPDF(fileName){
                 content[toReplace] = content[content.length-3];
             }
             fs.writeFileSync(inpFile,content.join('\n'));
-            gs.executeSync(`-sDEVICE=pngalpha -o ./assets/img/rnaHybrid/${fileName}.png -sDEVICE=pngalpha -r144 -dEPSCrop ${inpFile}`);
+            // gs.executeSync(`-sDEVICE=pngalpha -o ./assets/img/rnaHybrid/${fileName}.png -sDEVICE=pngalpha -r144 -dEPSCrop ${inpFile}`);
         } catch (err) {
             // Handle error
             throw err
