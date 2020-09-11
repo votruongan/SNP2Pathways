@@ -196,7 +196,7 @@ async function convertPsToPDF(fileName){
     })
 }
 
-module.exports = {get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget, testMirna, getSequenceFromNM}
+module.exports = {get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, getSequenceFromNM}
 
 // convertPsToPDF("F13D11.2.1-F13D11.2.1_cel-let-7_1");
 
