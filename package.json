@@ -1,5 +1,5 @@
 {
-  "name": "funcmirsnp",
+  "name": "snp2pathway",
   "version": "1.0.0",
   "description": "packages for funcmirsnp",
   "main": "server.js",
