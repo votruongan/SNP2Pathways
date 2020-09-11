@@ -4,7 +4,7 @@ const querystring = require('querystring');
 const fs = require('fs');
 
 const { parseMiRDBData, getMiRDBResult,resultFileName} = require('./get_miRDB');
-const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, testTarget,testMirna, getSequenceFromNM } = require('./get_RNAhybrid');
+const { get_rnaHybrid, convertPsToPDF,splitLongRNAToFasta, getSequenceFromNM } = require('./get_RNAhybrid');
 
 const { getKEGGData, getKEGGDataOffline } = require('./get_KEGG');
 const { SiteWarningError, makeRequest, readLines, sleep } = require('./helper');
