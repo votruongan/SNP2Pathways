@@ -110,7 +110,11 @@ app.get('/seq/:sequence', async (req, res) => {
 
 // const mimat = readLines("MIMAT_strip.txt").map((val) => {return val.split("\t");});
 const allDataLines = readLines("rs_only.tsv").map((val) => {return val.split("\t");});
-const pathwayFilter = readLines("pathway_filter.txt");
+const pathwayFilter = readLines("pathway_filter.txt").sort(function compare(a, b) {
+    if (a.toUpperCase().charCodeAt(0) > b.toUpperCase().charCodeAt(0)) return 1;
+    if (a.toUpperCase().charCodeAt(0) < b.toUpperCase().charCodeAt(0)) return -1;
+    return 0;
+});
 
 function uniqueMimatNamePos(allLines){
     curMimat = "";
