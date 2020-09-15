@@ -2,6 +2,7 @@ const util = require('util');
 const rp = util.promisify(require('request'));
 const fs = require('fs');
 const {sleep} =require('./helper');
+const { spawn,execFile } = require('child_process');
 
 
 
@@ -144,23 +145,71 @@ async function getResult(jobId){
     return finalRes.body;
 }
 
-async function get_rnaHybrid(target,mirna){
+function getPositionFromRString(rstring){
+    //calculate the position rnahybrid returned
+    const spos = rstring.indexOf('position ')+10;
+    const len = rstring.indexOf('\n',spos)-spos;
+    return rstring.substr(spos,len);
+}
+
+async function get_rnaHybrid_online(target,mirna){
     const jobId = await getResultId(target,mirna);
     if (jobId == null || jobId.length < 1) return null;
     const rstring = await getResult(jobId);
     if (rstring == null) return null;
     console.log(rstring);
-    //calculate the position rnahybrid returned
-    const spos = rstring.indexOf('position ')+10;
-    const len = rstring.indexOf('\n',spos)-spos;
-    const position = rstring.substr(spos,len);
+    const position = getPositionFromRString(rstring);
     // console.log("rnahybrid position:",spos,len,position)
     const img = await getImage(jobId,target,mirna,position,true);
     const buf = new Buffer(img);
     const fName = makeImgName(target,mirna,position,true);
-    write_rnaHybrid_html(rstring,fName);
     fs.writeFile('./assets/rnaHybrid/img/'+fName,buf,()=>{});
+    write_rnaHybrid_html(rstring,fName);
     return fName;
+}
+
+async function processRnaHybridOffline(targetFile,mirnaFile){
+    return new Promise((resolve,reject)=>{     
+        // const bat = execFile('rnaHybrid/RNAhybrid', [`-s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
+        const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
+
+        bat.stdout.on('data', (data) => {
+            resolve(data.toString());
+        });            
+        bat.stderr.on('data', (data) => {
+            console.error(`RNAHYBRID OFFLINE STDERROR: ${data}`);
+        });            
+        bat.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+        });
+    });
+}
+
+async function get_rnaHybrid_offline(target,mirna){
+    const targetName = target.split('\n')[0].replace(">","");
+    const mirnaName = mirna.split('\n')[0].replace(">","");
+    const targetFile = `./rnaHybrid/three_prime_utrs_fastas/${targetName}.fa`;
+    const mirnaFile = `./rnaHybrid/mirna_rs_sequence_fastas/${mirnaName}.fa`;
+    //make sure mirna file exists
+    let checkRes = null;
+    try{
+        checkRes = fs.statSync(mirnaFile)
+    }catch{}
+    if (!checkRes){
+        //mrina file is not exists
+        fs.writeFileSync(mirnaFile,mirna);
+    }
+    //run rnahybrid and get result string
+    const rstring = await processRnaHybridOffline(targetFile,mirnaFile);
+    const position = getPositionFromRString(rstring);
+    const fName = makeImgName(target,mirna,position,true);
+    // fs.writeFile('./assets/rnaHybrid/img/'+fName,buf,()=>{});
+    write_rnaHybrid_html(rstring,fName);
+    return fName;
+}
+
+async function get_rnaHybrid(target,mirna){
+    return await get_rnaHybrid_online(target,mirna);
 }
 async function write_rnaHybrid_html(result,fName){
     //make html
