@@ -170,7 +170,7 @@ async function get_rnaHybrid_online(target,mirna){
 
 async function processRnaHybridOffline(targetFile,mirnaFile){
     return new Promise((resolve,reject)=>{     
-        const bat = execFile('rnaHybrid/RNAhybrid', [`-s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
+        const bat = execFile('chmod 777 rnaHybrid/RNAhybrid && rnaHybrid/RNAhybrid', [`-s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
         // const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
 
         bat.stdout.on('data', (data) => {
