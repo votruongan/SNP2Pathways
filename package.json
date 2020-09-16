@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "chmod 777 rnaHybrid/RNAhybrid && chmod 777 rnaHybrid/three_prime_utrs_fastas && chmod 777 rnaHybrid/mirna_rs_sequence_fastas",
     "start": "node server.js"
   },
   "dependencies": {
