@@ -169,11 +169,13 @@ async function get_rnaHybrid_online(target,mirna){
 }
 
 async function processRnaHybridOffline(targetFile,mirnaFile){
-    return new Promise((resolve,reject)=>{     
-        const bat = execFile('chmod 777 rnaHybrid/RNAhybrid && rnaHybrid/RNAhybrid', [`-s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
+    return new Promise((resolve,reject)=>{
+        console.log(`chmod 777 rnaHybrid/RNAhybrid && rnaHybrid/RNAhybrid -s 3utr_human -t ${targetFile} -q ${mirnaFile}`);
+        const bat = execFile(`chmod 777 rnaHybrid/RNAhybrid && rnaHybrid/RNAhybrid -s 3utr_human -t ${targetFile} -q ${mirnaFile}`);
         // const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
 
         bat.stdout.on('data', (data) => {
+            console.log("stdout: ",data);
             resolve(data.toString());
         });            
         bat.stderr.on('data', (data) => {
@@ -199,7 +201,6 @@ async function get_rnaHybrid_offline(target,mirna){
     if (!checkRes){
         //mrina file is not exists
         fs.writeFileSync(mirnaFile,mirna);
-        console.log("mirna not found -> written data: ",fs.readFileSync(mirnaFile,{encoding:"utf-8"}));
     }
     //run rnahybrid and get result string
     const rstring = await processRnaHybridOffline(targetFile,mirnaFile);
