@@ -173,7 +173,7 @@ async function processRnaHybridOffline(targetFile,mirnaFile){
         // const givePermissionCommand = `chmod 777 rnaHybrid/RNAhybrid && chmod a=r ${targetFile} && chmod a=r ${mirnaFile}`;
         // console.log(givePermissionCommand+` && rnaHybrid/RNAhybrid -s 3utr_human -t ${targetFile} -q ${mirnaFile}`);
         console.log('rnaHybrid/RNAhybrid',['-s','3utr_human', '-t', targetFile, '-q', mirnaFile].join());
-        const bat = spawn('rnaHybrid/RNAhybrid',['-s','3utr_human', '-t', targetFile, '-q', mirnaFile]);
+        const bat = spawn('rnaHybrid/RNAhybrid',['-m','28100','-s','3utr_human', '-t', targetFile, '-q', mirnaFile]);
         // const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
 
         bat.stdout.on('data', (data) => {
