@@ -177,7 +177,7 @@ async function processRnaHybridOffline(targetFile,mirnaFile){
         // const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
 
         bat.stdout.on('data', (data) => {
-            console.log("stdout: ",data);
+            console.log("stdout: ",data.toString());
             resolve(data.toString());
         });            
         bat.stderr.on('data', (data) => {
