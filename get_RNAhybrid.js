@@ -170,14 +170,15 @@ async function get_rnaHybrid_online(target,mirna){
 
 async function processRnaHybridOffline(targetFile,mirnaFile){
     return new Promise((resolve,reject)=>{     
-        // const bat = execFile('rnaHybrid/RNAhybrid', [`-s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
-        const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
+        const bat = execFile('rnaHybrid/RNAhybrid', [`-s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
+        // const bat = spawn('cmd.exe', ['/c', `rnaHybrid\\RNAhybrid-2.1.2\\RNAhybrid.exe -s 3utr_human -t ${targetFile} -q ${mirnaFile}`]);
 
         bat.stdout.on('data', (data) => {
             resolve(data.toString());
         });            
         bat.stderr.on('data', (data) => {
             console.error(`RNAHYBRID OFFLINE STDERROR: ${data}`);
+            resolve(data.toString());
         });            
         bat.on('close', (code) => {
             console.log(`child process exited with code ${code}`);
@@ -209,7 +210,8 @@ async function get_rnaHybrid_offline(target,mirna){
 }
 
 async function get_rnaHybrid(target,mirna){
-    return await get_rnaHybrid_online(target,mirna);
+    return await get_rnaHybrid_offline(target,mirna);
+    // return await get_rnaHybrid_online(target,mirna);
 }
 async function write_rnaHybrid_html(result,fName){
     //make html
