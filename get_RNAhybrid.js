@@ -199,6 +199,7 @@ async function get_rnaHybrid_offline(target,mirna){
     if (!checkRes){
         //mrina file is not exists
         fs.writeFileSync(mirnaFile,mirna);
+        console.log("mirna not found -> written data: ",fs.readFileSync(mirnaFile,{encoding:"utf-8"}));
     }
     //run rnahybrid and get result string
     const rstring = await processRnaHybridOffline(targetFile,mirnaFile);
