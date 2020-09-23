@@ -17,6 +17,9 @@ app.use(express.static(__dirname + '/assets/'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/html/index.html');
 })
+app.get('/about', function(req, res){
+    res.sendFile(__dirname + '/html/about.html');
+})
 
 function sequenceToResultId(seq){
     return seq;
@@ -365,6 +368,12 @@ app.get('/recommendMIR/:mir', (req, res) => {
 app.get('/recommendHSA', (req, res) => {
     res.send({recommendHSA});
 })
+
+app.get('/get-file/rsonly', function(req, res){
+    const file = "https://raw.githubusercontent.com/votruongan/SNP2Pathways/master/rs_only.tsv"//`${__dirname}/rs_only.tsv`;
+    res.download(file); // Set disposition and send it.
+})
+  
 
 app.listen(port, () => console.log(`SNP2Pathway app is listening at http://localhost:${port}`))
 

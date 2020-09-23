@@ -81,6 +81,7 @@ function setGrandParentHeight(target,value){
 
 function tableDisplayResult(tableId,arr){
     tableId.textContent="";
+    grandParent(tableId).parentNode.children[0].children[0].children[0].innerHTML = `(${arr.length})`
     if (arr.length == 0){
         setGrandParentHeight(tableId,"100px");
         tableId.innerHTML = "<th><td></td><td>No result</td></th>";
