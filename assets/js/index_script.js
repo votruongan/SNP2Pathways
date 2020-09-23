@@ -271,7 +271,7 @@ function rsReturnProcessor(){
     notiTimeHandle = setTimeout(()=>{
         setObjectVisiblity(loadingPanel,false,"d-flex");
         setObjectVisiblity(notificationPanel,true,"focus");
-    },10*60*1000);
+    },5*60*1000);
     alenC_display.innerText = realObj.alenC;
     alenC_result.textContent = '';
     alenG_result.textContent = '';
