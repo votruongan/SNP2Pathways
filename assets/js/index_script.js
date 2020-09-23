@@ -79,6 +79,10 @@ function setGrandParentHeight(target,value){
     target.parentNode.parentNode.style.height = value;
 }
 
+currentC_array = []
+currentG_array = []
+currentCommon_array = []
+
 function tableDisplayResult(tableId,arr){
     tableId.textContent="";
     grandParent(tableId).parentNode.children[0].children[0].children[0].innerHTML = `(${arr.length})`
@@ -89,7 +93,6 @@ function tableDisplayResult(tableId,arr){
     }
     setGrandParentHeight(tableId,"290px");
     arr = filterDiseasesInArray(arr);
-    console.log(arr);
     for (let i = 0; i < arr.length; i++) {
         var r = makeResultRow(arr[i]);
         tableId.appendChild(r);                
@@ -113,6 +116,36 @@ function filterDiseasesInArray(objArray){
         }    
     }
     return data;
+}
+
+function dataObjectToString(arrObj){
+    let s = "", p = "";
+    for (let i = 0; i < arrObj.diseases.length; i++) {
+        const ele = arrObj.diseases[i];
+        p += `[${ele.id}]${ele.name}`;
+        if (i < arrObj.diseases.length - 1)
+            p += ',';
+    }
+    s = `${arrObj.rank}\t${arrObj.score}\t${arrObj.gId}\t${arrObj.gene}\t${arrObj.nmFile}\t${p}`;
+    return s;
+}
+
+function dataArrayToTsvString(arr){
+    let b =[];
+    for (let i = 0; i < arr.length; i++) {
+        const ele = arr[i];
+        b.push(dataObjectToString(ele));
+    }
+    return b.join('\n');
+}
+
+function exportDataToTSV(arr,fileName){
+    const d = dataArrayToTsvString(arr);
+    const dLink = document.createElement("a");
+    dLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(d);
+    dLink.setAttribute('download', fileName);
+    dLink.click();
+    dLink.parentNode.removeChild(dLink);
 }
 
 function parseDiseaseString(str){
@@ -154,6 +187,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,remove
         resultDisplayer.textContent = "";
     if (isResolveForMIMAT){
         console.log('isResolveForMIMAT')
+        result_array[currentIndex] = data;
         tableDisplayResult(alenC_result,data);
         clearTimeout(notiTimeHandle);
         setObjectVisiblity(loadingPanel, false, "d-flex");

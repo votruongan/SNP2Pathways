@@ -118,12 +118,13 @@
 		<div class="col-lg-6 p-0 px-lg-3">
 			<div class="shadow pb-1 text-center" style="height: auto;">
 				<div class="btn-success py-0">
-					<h4>Reference RNA Target Genes <i></i></h4>
+					<h4 class="mb-0">Reference RNA Target Genes <i></i></h4>
 				</div>
 				<div class="row	 justify-content-center">	
 					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
-					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:1rem;" id="alenC_display">
+					<div class="col-8 mb-3 text-center pl-1 pt-2" style="letter-spacing: 1.2px;height:1rem;" id="alenC_display">
 					</div>
+					<button class="col-3 form-control btn-light mt-0" onclick="exportDataToTSV(result_array[0],'ref_result.tsv');">Export tsv</button>
 				</div>
 				<div  class="overflow-auto" style="height:290px;" >
 					<table class="table">
@@ -143,12 +144,13 @@
 		<div class="col-lg-6 p-0 px-lg-3">
 			<div class="shadow pb-1 text-center"  style="height: auto;">
 				<div class="btn-success py-0">
-					<h4>Alternate RNA Target Genes <i></i></h4>
+					<h4 class=" mb-0">Alternate RNA Target Genes <i></i></h4>
 				</div>
-				<div class="row	 justify-content-center">	
+				<div class="row justify-content-center">	
 					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
-					<div class="mb-3 text-left pl-1" style="letter-spacing: 1.2px;height:1rem;" id="alenG_display">
+					<div class="col-8 mb-3 text-center pl-1  pt-2" style="letter-spacing: 1.2px;height:1rem;" id="alenG_display">
 					</div>
+					<button class="col-3 form-control btn-light mt-0" onclick="exportDataToTSV(result_array[1],'alt_result.tsv');">Export tsv</button>
 				</div>
 				<div  class="overflow-auto" style="height:290px;" >
 					<table class="table">
@@ -174,6 +176,10 @@
 			<div class="shadow pb-2 text-center" style="height: auto;">
 				<div class="btn-success py-0">
 					<h4>Same target genes <i></i></h4>
+				</div>
+				<div class="row justify-content-center">	
+					<!-- <p class="text-right pr-0 mx-0 font-weight-bold">RNA Sequence:</p> -->
+					<button class="col-3 form-control btn-light mt-0" onclick="exportDataToTSV(common_result,'same_result.tsv');">Export tsv</button>
 				</div>
 				<div  class="overflow-auto" style="height:290px;" >
 					<table class="table">
