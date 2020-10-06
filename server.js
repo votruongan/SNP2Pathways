@@ -14,6 +14,8 @@ const port = process.env.PORT || 3000;
 app.use(favicon("assets/img/favicon.png"));
 app.use(express.static(__dirname + '/assets/'));
 
+const reqMonitor = [];
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/html/index.html');
 })
@@ -63,18 +65,7 @@ app.get('/rna_hybrid/:target/:mimat/:support', async (req,res)=>{
     res.send(fName);
 });
 
-app.get('/seq/:sequence', async (req, res) => {
-    let seq = req.params.sequence.toUpperCase();
-    let obj = {
-        sequence: seq,
-    };
-    const checkRes = await readResultFile(sequenceToResultId(seq));
-    if (checkRes != null){
-        console.log(checkRes);
-        obj.path=seq;
-        res.send(obj);
-        return;
-    }
+function startMirDBRequest(seq){
     console.log("got sequence: ", seq);
     //make request to miRDB
     const postData = querystring.stringify({
@@ -87,7 +78,6 @@ app.get('/seq/:sequence', async (req, res) => {
     const en = (chunk) => {
         console.log(`END BODY: ${chunk}`);
     };
-
     const options = {
         hostname: 'mirdb.org',
         port: 80,
@@ -99,12 +89,29 @@ app.get('/seq/:sequence', async (req, res) => {
         },
         postData: postData,
     };
-
     makeRequest(options,(chunk) => {
         console.log("CHUNK:",chunk);
+        if (chunk.includes("404 Not ")){
+            startMirDBRequest(seq)
+        }
         getMiRDBResult(chunk,seq);
     },en,true);
     //send the result back to client
+}
+
+app.get('/seq/:sequence', async (req, res) => {
+    let seq = req.params.sequence.toUpperCase();
+    let obj = {
+        sequence: seq,
+    };
+    const checkRes = await readResultFile(sequenceToResultId(seq));
+    if (checkRes != null){
+        console.log(checkRes);
+        obj.path=seq;
+        res.send(obj);
+        return;
+    }
+    startMirDBRequest(seq);
     res.send(obj);
 })
 
@@ -166,6 +173,8 @@ console.log("RecommendMIR length:",recommendMIR.length,"- RecommendHSA length:",
 async function readResultFile(resId){
     let fileName = resultFileName(resId);
     console.log("checking file:",fileName);
+    reqMonitor[resId] = (reqMonitor[resId] == null) ? 0 :(reqMonitor[resId]++);
+    if (reqMonitor[resId] > 19) startMirDBRequest(reqMonitor[resId]);
     let promise = new Promise((resolve, reject) => {
         // Check if the file exists in the current directory.
         fs.access(fileName, fs.constants.F_OK, (err) => {
