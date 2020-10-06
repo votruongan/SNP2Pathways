@@ -66,6 +66,7 @@ app.get('/rna_hybrid/:target/:mimat/:support', async (req,res)=>{
 });
 
 function startMirDBRequest(seq){
+    reqMonitor[seq] = 0;
     console.log("got sequence: ", seq);
     //make request to miRDB
     const postData = querystring.stringify({
