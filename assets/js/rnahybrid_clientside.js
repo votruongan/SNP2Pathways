@@ -37,18 +37,22 @@ function showRnaHybrid(){
     const nmId = this.parentNode.children[2].innerText;
     const gene = this.parentNode.children[1].children[0].innerText;
     let alen1 = null, alen2 = null;
-    if (panelId == "common_result_display"){        
-        alen1 = mimatCode;      
-        alen2 = altSeqId;
-        toggleRnaHybridPanel(refRnaHybrid,true,true);
-        toggleRnaHybridPanel(altRnaHybrid,true,true);
-    }
-    else{
-        toggleRnaHybridPanel(refRnaHybrid,true);
-        toggleRnaHybridPanel(altRnaHybrid,false);
-        console.log(panelId, pIdPrefix)
-        alen1 = (pIdPrefix == "alenC_")?(refSeqId):(altSeqId)
-    }
+    alen1 = mimatCode;
+    alen2 = altSeqId;
+    toggleRnaHybridPanel(refRnaHybrid,true,true);
+    toggleRnaHybridPanel(altRnaHybrid,true,true);
+    // if (panelId == "common_result_display"){        
+    //     alen1 = mimatCode;      
+    //     alen2 = altSeqId;
+    //     toggleRnaHybridPanel(refRnaHybrid,true,true);
+    //     toggleRnaHybridPanel(altRnaHybrid,true,true);
+    // }
+    // else{
+    //     toggleRnaHybridPanel(refRnaHybrid,true);
+    //     toggleRnaHybridPanel(altRnaHybrid,false);
+    //     console.log(panelId, pIdPrefix)
+    //     alen1 = (pIdPrefix == "alenC_")?(refSeqId):(altSeqId)
+    // }
     console.log(nmId,alen1,alen2);
     rnaHybridResult.classList.add("focus");
     makeRequestRnaHybrid(nmId,alen1,refRnaHybrid,gene);
