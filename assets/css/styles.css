@@ -234,7 +234,7 @@ table {
   width: 100%;
 }
 td { white-space:pre-wrap; word-wrap:break-word }
-table td {
+table#pathway_filter_box td {
   word-wrap: break-word;         /* All browsers since IE 5.5+ */
   overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
 }

@@ -43,3 +43,19 @@
 	pointer-events: none;
 	background: #ccc;
 }
+
+
+@media only screen and (min-width: 950px){
+	#controlPanel * {
+		font-size: 10px !important;
+	}
+}
+
+
+@media only screen and (min-width: 1800px){
+	#controlPanel * {
+		font-size: 1rem;
+	}
+	
+}
+	
