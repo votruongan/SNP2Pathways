@@ -1,0 +1,221 @@
+hsa04010	MAPK signaling pathway	False
+hsa04012	ErbB signaling pathway	False
+hsa04014	Ras signaling pathway	False
+hsa04015	Rap1 signaling pathway	False
+hsa04310	Wnt signaling pathway	False
+hsa04330	Notch signaling pathway	False
+hsa04340	Hedgehog signaling pathway	False
+hsa04350	TGF-beta signaling pathway	False
+hsa04390	Hippo signaling pathway	False
+hsa04392	Hippo signaling pathway - multiple species	False
+hsa04370	VEGF signaling pathway	False
+hsa04371	Apelin signaling pathway	False
+hsa04630	JAK-STAT signaling pathway	False
+hsa04064	NF-kappa B signaling pathway	False
+hsa04668	TNF signaling pathway	False
+hsa04066	HIF-1 signaling pathway	False
+hsa04068	FoxO signaling pathway	False
+hsa04020	Calcium signaling pathway	False
+hsa04070	Phosphatidylinositol signaling system	False
+hsa04072	Phospholipase D signaling pathway	False
+hsa04071	Sphingolipid signaling pathway	False
+hsa04024	cAMP signaling pathway	False
+hsa04022	cGMP-PKG signaling pathway	False
+hsa04151	PI3K-Akt signaling pathway	False
+hsa04152	AMPK signaling pathway	False
+hsa04150	mTOR signaling pathway	False
+hsa04080	Neuroactive ligand-receptor interaction	False
+hsa04060	Cytokine-cytokine receptor interaction	False
+hsa04061	Viral protein interaction with cytokine and cytokine receptor	False
+hsa04512	ECM-receptor interaction	False
+hsa04514	Cell adhesion molecules	False
+hsa04144	Endocytosis	False
+hsa04145	Phagosome	False
+hsa04142	Lysosome	False
+hsa04146	Peroxisome	False
+hsa04140	Autophagy - animal	False
+hsa04137	Mitophagy - animal	False
+hsa04110	Cell cycle	False
+hsa04210	Apoptosis	False
+hsa04215	Apoptosis - multiple species	False
+hsa04216	Ferroptosis	False
+hsa04217	Necroptosis	False
+hsa04115	p53 signaling pathway	False
+hsa04218	Cellular senescence	False
+hsa04510	Focal adhesion	False
+hsa04520	Adherens junction	False
+hsa04530	Tight junction	False
+hsa04540	Gap junction	False
+hsa04550	Signaling pathways regulating pluripotency of stem cells	False
+hsa04810	Regulation of actin cytoskeleton	False
+hsa04640	Hematopoietic cell lineage	False
+hsa04610	Complement and coagulation cascades	False
+hsa04611	Platelet activation	False
+hsa04620	Toll-like receptor signaling pathway	False
+hsa04621	NOD-like receptor signaling pathway	False
+hsa04622	RIG-I-like receptor signaling pathway	False
+hsa04623	Cytosolic DNA-sensing pathway	False
+hsa04625	C-type lectin receptor signaling pathway	False
+hsa04650	Natural killer cell mediated cytotoxicity	False
+hsa04612	Antigen processing and presentation	False
+hsa04660	T cell receptor signaling pathway	False
+hsa04658	Th1 and Th2 cell differentiation	False
+hsa04659	Th17 cell differentiation	False
+hsa04657	IL-17 signaling pathway	False
+hsa04662	B cell receptor signaling pathway	False
+hsa04664	Fc epsilon RI signaling pathway	False
+hsa04666	Fc gamma R-mediated phagocytosis	False
+hsa04670	Leukocyte transendothelial migration	False
+hsa04672	Intestinal immune network for IgA production	False
+hsa04062	Chemokine signaling pathway	False
+hsa04911	Insulin secretion	False
+hsa04910	Insulin signaling pathway	False
+hsa04922	Glucagon signaling pathway	False
+hsa04923	Regulation of lipolysis in adipocytes	False
+hsa04920	Adipocytokine signaling pathway	False
+hsa03320	PPAR signaling pathway	False
+hsa04929	GnRH secretion	False
+hsa04912	GnRH signaling pathway	False
+hsa04913	Ovarian steroidogenesis	False
+hsa04915	Estrogen signaling pathway	False
+hsa04917	Prolactin signaling pathway	False
+hsa04921	Oxytocin signaling pathway	False
+hsa04926	Relaxin signaling pathway	False
+hsa04935	Growth hormone synthesis, secretion and action	False
+hsa04918	Thyroid hormone synthesis	False
+hsa04919	Thyroid hormone signaling pathway	False
+hsa04928	Parathyroid hormone synthesis, secretion and action	False
+hsa04916	Melanogenesis	False
+hsa04924	Renin secretion	False
+hsa04614	Renin-angiotensin system	False
+hsa04925	Aldosterone synthesis and secretion	False
+hsa04927	Cortisol synthesis and secretion	False
+hsa04260	Cardiac muscle contraction	False
+hsa04261	Adrenergic signaling in cardiomyocytes	False
+hsa04270	Vascular smooth muscle contraction	False
+hsa04970	Salivary secretion	False
+hsa04971	Gastric acid secretion	False
+hsa04972	Pancreatic secretion	False
+hsa04976	Bile secretion	False
+hsa04973	Carbohydrate digestion and absorption	False
+hsa04974	Protein digestion and absorption	False
+hsa04975	Fat digestion and absorption	False
+hsa04979	Cholesterol metabolism	False
+hsa04977	Vitamin digestion and absorption	False
+hsa04978	Mineral absorption	False
+hsa04962	Vasopressin-regulated water reabsorption	False
+hsa04960	Aldosterone-regulated sodium reabsorption	False
+hsa04961	Endocrine and other factor-regulated calcium reabsorption	False
+hsa04964	Proximal tubule bicarbonate reclamation	False
+hsa04966	Collecting duct acid secretion	False
+hsa04724	Glutamatergic synapse	False
+hsa04727	GABAergic synapse	False
+hsa04725	Cholinergic synapse	False
+hsa04728	Dopaminergic synapse	False
+hsa04726	Serotonergic synapse	False
+hsa04720	Long-term potentiation	False
+hsa04730	Long-term depression	False
+hsa04723	Retrograde endocannabinoid signaling	False
+hsa04721	Synaptic vesicle cycle	False
+hsa04722	Neurotrophin signaling pathway	False
+hsa04744	Phototransduction	False
+hsa04740	Olfactory transduction	False
+hsa04742	Taste transduction	False
+hsa04750	Inflammatory mediator regulation of TRP channels	False
+hsa04360	Axon guidance	False
+hsa04380	Osteoclast differentiation	False
+hsa04211	Longevity regulating pathway	False
+hsa04213	Longevity regulating pathway - multiple species	False
+hsa04710	Circadian rhythm	False
+hsa04713	Circadian entrainment	False
+hsa04714	Thermogenesis	False
+hsa05200	Pathways in cancer	True
+hsa05202	Transcriptional misregulation in cancer	True
+hsa05206	MicroRNAs in cancer	True
+hsa05205	Proteoglycans in cancer	True
+hsa05204	Chemical carcinogenesis	True
+hsa05203	Viral carcinogenesis	True
+hsa05230	Central carbon metabolism in cancer	True
+hsa05231	Choline metabolism in cancer	True
+hsa05235	PD-L1 expression and PD-1 checkpoint pathway in cancer	True
+hsa05210	Colorectal cancer	True
+hsa05212	Pancreatic cancer	True
+hsa05225	Hepatocellular carcinoma	True
+hsa05226	Gastric cancer	True
+hsa05214	Glioma	True
+hsa05216	Thyroid cancer	True
+hsa05221	Acute myeloid leukemia	True
+hsa05220	Chronic myeloid leukemia	True
+hsa05217	Basal cell carcinoma	True
+hsa05218	Melanoma	True
+hsa05211	Renal cell carcinoma	True
+hsa05219	Bladder cancer	True
+hsa05215	Prostate cancer	True
+hsa05213	Endometrial cancer	True
+hsa05224	Breast cancer	True
+hsa05222	Small cell lung cancer	True
+hsa05223	Non-small cell lung cancer	True
+hsa05310	Asthma	True
+hsa05322	Systemic lupus erythematosus	True
+hsa05323	Rheumatoid arthritis	True
+hsa05320	Autoimmune thyroid disease	True
+hsa05321	Inflammatory bowel disease	True
+hsa05330	Allograft rejection	True
+hsa05332	Graft-versus-host disease	True
+hsa05340	Primary immunodeficiency	True
+hsa05010	Alzheimer disease	True
+hsa05012	Parkinson disease	True
+hsa05014	Amyotrophic lateral sclerosis	True
+hsa05016	Huntington disease	True
+hsa05017	Spinocerebellar ataxia	True
+hsa05020	Prion disease	True
+hsa05022	Pathways of neurodegeneration - multiple diseases	True
+hsa05030	Cocaine addiction	True
+hsa05031	Amphetamine addiction	True
+hsa05032	Morphine addiction	True
+hsa05033	Nicotine addiction	True
+hsa05034	Alcoholism	True
+hsa05418	Fluid shear stress and atherosclerosis	True
+hsa05410	Hypertrophic cardiomyopathy	True
+hsa05412	Arrhythmogenic right ventricular cardiomyopathy	True
+hsa05414	Dilated cardiomyopathy	True
+hsa05416	Viral myocarditis	True
+hsa04930	Type II diabetes mellitus	True
+hsa04940	Type I diabetes mellitus	True
+hsa04950	Maturity onset diabetes of the young	True
+hsa04932	Non-alcoholic fatty liver disease	True
+hsa04931	Insulin resistance	True
+hsa04933	AGE-RAGE signaling pathway in diabetic complications	True
+hsa04934	Cushing syndrome	True
+hsa05110	Vibrio cholerae infection	True
+hsa05120	Epithelial cell signaling in Helicobacter pylori infection	True
+hsa05130	Pathogenic Escherichia coli infection	True
+hsa05132	Salmonella infection	True
+hsa05131	Shigellosis	True
+hsa05135	Yersinia infection	True
+hsa05133	Pertussis	True
+hsa05134	Legionellosis	True
+hsa05150	Staphylococcus aureus infection	True
+hsa05152	Tuberculosis	True
+hsa05100	Bacterial invasion of epithelial cells	True
+hsa05166	Human T-cell leukemia virus 1 infection	True
+hsa05170	Human immunodeficiency virus 1 infection	True
+hsa05162	Measles	True
+hsa05164	Influenza A	True
+hsa05161	Hepatitis B	True
+hsa05160	Hepatitis C	True
+hsa05168	Herpes simplex virus 1 infection	True
+hsa05163	Human cytomegalovirus infection	True
+hsa05167	Kaposi sarcoma-associated herpesvirus infection	True
+hsa05169	Epstein-Barr virus infection	True
+hsa05165	Human papillomavirus infection	True
+hsa05146	Amoebiasis	True
+hsa05144	Malaria	True
+hsa05145	Toxoplasmosis	True
+hsa05140	Leishmaniasis	True
+hsa05142	Chagas disease	True
+hsa05143	African trypanosomiasis	True
+hsa01521	EGFR tyrosine kinase inhibitor resistance	True
+hsa01524	Platinum drug resistance	True
+hsa01523	Antifolate resistance	True
+hsa01522	Endocrine resistance	True
