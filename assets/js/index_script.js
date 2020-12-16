@@ -459,8 +459,12 @@ function toggleAllPathwayFilter(val){
     }
 }
 
+function gotoTargetExpression(){
+    window.open("http://mirdb.org/expression.html","Target Expression","width=700,height=600")
+}
+
 rsid.addEventListener("focusout",suggestAlternateFromRs);
-miRNA.addEventListener("input",sendMIR);
+document.getElementById("miRNA").addEventListener("input",sendMIR);
 filter_pathway_filter.addEventListener("input",filterPathwayFilter);
 processButton.addEventListener("click",sendRS);
 deselectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(false)});
