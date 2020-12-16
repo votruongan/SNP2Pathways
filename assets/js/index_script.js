@@ -459,8 +459,18 @@ function toggleAllPathwayFilter(val){
     }
 }
 
-function gotoTargetExpression(){
-    window.open("http://mirdb.org/expression.html","Target Expression","width=700,height=600")
+async function gotoTargetExpression(){
+    if (rsid.disabled) return;
+    setObjectVisiblity(expressionPanel, true);
+    await fetch("/data/cellLine.tsv").then(res=> res.text()).then(dat =>{
+        const lines = dat.split("\n");
+        lines.map(val => val.split("\t"))
+        lines.forEach(ele => {
+            
+        });
+    })
+    // expressionIframe.contentWindow.document.getElementsByName("searchBox")[0].value = miRNA.value;
+    // window.open("http://mirdb.org/expression.html","_blank")
 }
 
 rsid.addEventListener("focusout",suggestAlternateFromRs);
