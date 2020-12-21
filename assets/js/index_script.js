@@ -487,12 +487,18 @@ function filterCellLine(){
 }
 
 function makeCellLineRow(index, cellLine,source){
+    for (let i = 0; i < skips.length; i++){
+        if (skips[i] <= index)
+            index++
+        else break;
+    }
     const url = `http://www.mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${getEle("miRNA").value}&searchBox=${index}`
     return makeElement('tr',`<td><a href="${url}" target="_blank width="600px" height="600px" onclick="window.open("${url}","_blank","width:600px,height:600px")">${cellLine}</a>
     </td><td>${source}</td>`)
 }
 
 allCellLines = null;
+skips = [459, 485, 496, 637, 892, 943]
 async function gotoTargetExpression(){
     if (rsid.disabled) return;
     setObjectVisiblity(expressionPanel, true);
