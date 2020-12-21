@@ -459,23 +459,61 @@ function toggleAllPathwayFilter(val){
     }
 }
 
+function makeCellLineTable(arr){
+    cellLineBody.innerText = ""
+    if (arr === allCellLines){
+        arr.forEach((ele,ind) => {
+            cellLineBody.appendChild(makeCellLineRow(ind + 1,ele[0],ele[1]))
+        });
+        return;
+    }
+    arr.forEach((ele) => {
+        let ind = allCellLines.indexOf(ele);
+        console.log(ind, allCellLines[ind],ele)
+        cellLineBody.appendChild(makeCellLineRow(ind + 1,ele[0],ele[1]))
+    });
+}
+
+function filterCellLine(){
+    const s = filter_cellLine.value;
+    if (!s || s == ""){
+        makeCellLineTable(allCellLines);
+        return
+    }
+    const a = allCellLines.filter((val)=> 
+    (val[0].toLowerCase().includes(s.toLowerCase()) && filter_cellLine_name.checked) 
+    || (val[1].toLowerCase().includes(s.toLowerCase()) && filter_cellLine_source.checked))
+    makeCellLineTable(a);
+}
+
+function makeCellLineRow(index, cellLine,source){
+    const url = `http://www.mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${getEle("miRNA").value}&searchBox=${index}`
+    return makeElement('tr',`<td><a href="${url}" target="_blank width="600px" height="600px" onclick="window.open("${url}","_blank","width:600px,height:600px")">${cellLine}</a>
+    </td><td>${source}</td>`)
+}
+
+allCellLines = null;
 async function gotoTargetExpression(){
-    // if (rsid.disabled) return;
-    // setObjectVisiblity(expressionPanel, true);
-    // await fetch("/data/cellLine.tsv").then(res=> res.text()).then(dat =>{
-    //     const lines = dat.split("\n");
-    //     lines.map(val => val.split("\t"))
-    //     lines.forEach(ele => {
-            
-    //     });
-    // })
+    if (rsid.disabled) return;
+    setObjectVisiblity(expressionPanel, true);
+    if (!allCellLines)
+    await fetch("/data/cellLine.tsv").then(res=> res.text()).then(dat =>{
+        let lines = dat.split("\n");
+        lines = lines.map(val => val.split("\t"))
+        console.log(lines.length)
+        allCellLines = lines
+        makeCellLineTable(allCellLines);
+    })
     // expressionIframe.contentWindow.document.getElementsByName("searchBox")[0].value = miRNA.value;
-    window.open("http://mirdb.org/expression.html","_blank")
+    // window.open("http://mirdb.org/expression.html","_blank","width:600px,height:600px")
 }
 
 rsid.addEventListener("focusout",suggestAlternateFromRs);
 document.getElementById("miRNA").addEventListener("input",sendMIR);
 filter_pathway_filter.addEventListener("input",filterPathwayFilter);
+filter_cellLine.addEventListener("input",filterCellLine);
+filter_cellLine_name.addEventListener("change",filterCellLine);
+filter_cellLine_source.addEventListener("change",filterCellLine);
 processButton.addEventListener("click",sendRS);
 deselectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(false)});
 selectAll_pathway.addEventListener("click",()=>{toggleAllPathwayFilter(true)});

@@ -113,17 +113,24 @@
 			<div class="overlay w-100 h-100 py-2 d-flex btn justify-content-center align-items-center">
 			<div class="col-6 bg-white py-2 h-100">
 				<h3> Choose a cell line to get target</h3>
-				<div class="justify-content-center d-flex mb-2 h-100">
-					<div class="form-control p-0"  style="width:90%; height: 90%; overflow: auto;">
+				<div class="mb-2 d-flex align-items-center justify-content-center">
+					<p class="m-0 p-0">Cell Line Filter:</p>
+					<input class="ml-2 mr-5" id="filter_cellLine"></input>
+					Filter by:
+					<input class="ml-2" id="filter_cellLine_name" checked type="checkbox"> Cell Line</input>
+					<input class="ml-2" id="filter_cellLine_source" checked type="checkbox"> Source</input>
+				</div>
+				<div class="justify-content-center d-flex mb-2 h-100">					
+					<div class="form-control p-0"  style="width:90%; height: 80%; overflow: auto;">
 					<table class="table" >
 						<thead>
 						  <td>Cell line name</td>
 						  <td>Source</td>
 						</thead>		   
-						<tbody>
+						<tbody id="cellLineBody">
 							<tr>
-								<td>105KC</td>
-								<td>sarcomatiod</td>
+								<!-- <td><a href="/">105KC</a></td>
+								<td>sarcomatiod</td> -->
 							</tr>
 						</tbody>
 					</table></div>
