@@ -517,9 +517,11 @@ async function targetExpression(mValue, cellIndexValue, cellLine){
         try {
             s = parseInt(s);
         } catch(e){return}
-        if (s > 20) {$( this ).text("HIGH");return;}
-        if (s > 5) {$( this ).text("MEDIUM");return;}
-        $( this ).text("LOW");return;
+        let level = "";
+        if (s > 20) level = "HIGH";
+        else if (s > 5) level = "medium";
+        else level = "low";
+        $(this).text(`${level} (${s})`)
       });
     setObjectVisiblity(cellLinePanel,false,"d-block");
     setObjectVisiblity(expressResultPanel,true,"d-block");
