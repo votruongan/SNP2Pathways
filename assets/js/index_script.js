@@ -492,9 +492,38 @@ function makeCellLineRow(index, cellLine,source){
             index++
         else break;
     }
-    const url = `http://www.mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${getEle("miRNA").value}&searchBox=${index}`
-    return makeElement('tr',`<td><a href="${url}" target="_blank width="600px" height="600px" onclick="window.open("${url}","_blank","width:600px,height:600px")">${cellLine}</a>
+    // const url = `http://www.mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${getEle("miRNA").value}&searchBox=${index}`
+    // return makeElement('tr',`<td><a href="javascript:targetExpression('${getEle("miRNA").value}',${index})" target="_blank width="600px" height="600px" onclick="window.open("${url}","_blank","width:600px,height:600px")">${cellLine}</a>
+    // </td><td>${source}</td>`)
+    return makeElement('tr',`<td><a href="javascript:targetExpression('${getEle("miRNA").value}',${index}, '${cellLine}');">${cellLine}</a>
     </td><td>${source}</td>`)
+}
+
+async function targetExpression(mValue, cellIndexValue, cellLine){
+    const url = `/expression/${mValue}/${cellIndexValue}`
+    setObjectVisiblity(loadingPanel,true,"d-flex");
+    let r = await (await fetch(url)).text()
+    console.log(r)
+    expressResultCellLineName.innerText = "Choosed cell line: " + r.split("with expression level >=1 in cell line ")[1].split(".")[0];
+    r = r.split("</table>")
+    r.splice(0,2)
+    r = r.join("");
+    r = r;
+    expressResultTable.innerHTML = r;
+    $('td[width="52"]').remove();
+    $('td[width="100"]').each(function( index ) {
+        if (index %2 == 0 || index < 2) return;
+        let s = $( this ).text();
+        try {
+            s = parseInt(s);
+        } catch(e){return}
+        if (s > 20) {$( this ).text("HIGH");return;}
+        if (s > 5) {$( this ).text("MEDIUM");return;}
+        $( this ).text("LOW");return;
+      });
+    setObjectVisiblity(cellLinePanel,false,"d-block");
+    setObjectVisiblity(expressResultPanel,true,"d-block");
+    setObjectVisiblity(loadingPanel,false,"d-flex");
 }
 
 allCellLines = null;
@@ -503,13 +532,15 @@ async function gotoTargetExpression(){
     if (rsid.disabled) return;
     setObjectVisiblity(expressionPanel, true);
     if (!allCellLines)
-    await fetch("/data/cellLine.tsv").then(res=> res.text()).then(dat =>{
-        let lines = dat.split("\n");
-        lines = lines.map(val => val.split("\t"))
-        console.log(lines.length)
-        allCellLines = lines
-        makeCellLineTable(allCellLines);
-    })
+        await fetch("/data/cellLine.tsv").then(res=> res.text()).then(dat =>{
+            let lines = dat.split("\n");
+            lines = lines.map(val => val.split("\t"))
+            console.log(lines.length)
+            allCellLines = lines
+            makeCellLineTable(allCellLines);
+        })
+    setObjectVisiblity(cellLinePanel,true,"d-block");
+    setObjectVisiblity(expressResultPanel,false,"d-block");
     // expressionIframe.contentWindow.document.getElementsByName("searchBox")[0].value = miRNA.value;
     // window.open("http://mirdb.org/expression.html","_blank","width:600px,height:600px")
 }

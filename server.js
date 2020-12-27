@@ -100,6 +100,14 @@ function startMirDBRequest(seq){
     //send the result back to client
 }
 
+const request = require("request")
+
+app.get('/expression/:mir/:index', async (req, res)=>{
+    const{mir, index} = req.params;
+    const url = `http://www.mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${mir}&searchBox=${index}`;
+    request(url,(_,data,__)=>{ return res.send(data.body) });
+})
+
 app.get('/seq/:sequence', async (req, res) => {
     let seq = req.params.sequence.toUpperCase();
     let obj = {

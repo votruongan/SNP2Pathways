@@ -9,6 +9,7 @@
     <link href="css/fonts.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" >
 	<script src="js/run_on_page_init.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- <link href="css/all.css" rel="stylesheet" > -->
     <!-- <link href="css/normal.css" rel="stylesheet" > -->
 </head>
@@ -88,55 +89,45 @@
 		<div class="overlay overlay-button d-block">
 			<button class="btn btn-secondary"  id="btnToggleRemove" onclick="toggleRemoveSimilarGene();">Remove similar target genes</button>
 		</div>
-		<div class="overlay d-none justify-content-center align-items-center pb-5 mt-0"  id="loadingPanel">
-			<div class="col-3"></div>
-			<div class="d-block">
-				<div class="row d-flex justify-content-center">
-					<div class="spinner-border text-info" style="width: 16rem; height: 16rem;"  role="status">
-					<!-- <img src="./img/plasmide.png"></img> -->
-					<span class="sr-only"></span>
-					</div>
-				</div>
-				<div class="row">
-			<div style="flex-basis: 100%;height: 100px;">
-				<div class="py-5 d-none" id="delay15Seconds">
-					<h3 class="mb-4">Process could take up to 5 minutes. Please wait.</h3>
-				</div>
-			</div>
-				</div> <!-- break -->
-			</div>
-		</div>
 		<div class="overlay d-none focus"  id="expressionPanel">
 			<div class=" w-100 h-100 d-block">
 				<button class="btn btn-primary fixed-top float-right text-gray px-3" style="font-size: 24px!important;" onclick="setObjectVisiblity(expressionPanel,false);">X</button>
 			</div>
 			<div class="overlay w-100 h-100 py-2 d-flex btn justify-content-center align-items-center">
 			<div class="col-6 bg-white py-2 h-100">
-				<h3> Choose a cell line to get target</h3>
-				<div class="mb-2 d-flex align-items-center justify-content-center">
-					<p class="m-0 p-0">Cell Line Filter:</p>
-					<input class="ml-2 mr-5" id="filter_cellLine"></input>
-					Filter by:
-					<input class="ml-2" id="filter_cellLine_name" checked type="checkbox"> Cell Line</input>
-					<input class="ml-2" id="filter_cellLine_source" checked type="checkbox"> Source</input>
+				<div class="w-100 h-100" id="cellLinePanel">
+					<h3> Choose a cell line to get target</h3>
+					<div class="mb-2 d-flex align-items-center justify-content-center">
+						<p class="m-0 p-0">Cell Line Filter:</p>
+						<input class="ml-2 mr-5" id="filter_cellLine"></input>
+						Filter by:
+						<input class="ml-2" id="filter_cellLine_name" checked type="checkbox"> Cell Line</input>
+						<input class="ml-2" id="filter_cellLine_source" checked type="checkbox"> Source</input>
+					</div>
+					<div class="justify-content-center d-flex mb-2 h-100">					
+						<div class="form-control p-0"  style="width:90%; height: 80%; overflow: auto;">
+						<table class="table" >
+							<thead>
+							<td>Cell line name</td>
+							<td>Source</td>
+							</thead>		   
+							<tbody id="cellLineBody">
+								<tr>
+									<!-- <td><a href="/">105KC</a></td>
+									<td>sarcomatiod</td> -->
+								</tr>
+							</tbody>
+						</table></div>
+					</div>
 				</div>
-				<div class="justify-content-center d-flex mb-2 h-100">					
-					<div class="form-control p-0"  style="width:90%; height: 80%; overflow: auto;">
-					<table class="table" >
-						<thead>
-						  <td>Cell line name</td>
-						  <td>Source</td>
-						</thead>		   
-						<tbody id="cellLineBody">
-							<tr>
-								<!-- <td><a href="/">105KC</a></td>
-								<td>sarcomatiod</td> -->
-							</tr>
-						</tbody>
-					</table></div>
+				<div class="w-100 h-100" id="expressResultPanel">
+					<h3 id="expressResultCellLineName"></h3>
+					<a href="javascript:gotoTargetExpression();">Choose another cell line</a>
+					<div class="w-100 h-75" style="overflow: auto;" id="expressResultTable">
+					</div>
+					<p>This result is fetched from <a href="http://mirdb.org/expression.html" target="_blank">http://mirdb.org/expression.html</a></p>
 				</div>
 				<!-- <iframe src="http://mirdb.org/expression.html" width="100%" height="90%" id="expressionIframe"></iframe> -->
-				<p>This result is fetched from <a href="http://mirdb.org/expression.html" target="_blank">http://mirdb.org/expression.html</a></p>
 		  	</div>
 			</div>
 		</div>
@@ -233,7 +224,25 @@
 		</div>
 		</div>
 		<!-- <img class="d-none  h-50" src="./img/loading.gif" id="loadingPanel"></img> -->
+	</div>		<div class="overlay d-none justify-content-center align-items-center pb-5 mt-0"  id="loadingPanel">
+		<div class="col-3"></div>
+		<div class="d-block">
+			<div class="row d-flex justify-content-center">
+				<div class="spinner-border text-info" style="width: 16rem; height: 16rem;"  role="status">
+				<!-- <img src="./img/plasmide.png"></img> -->
+				<span class="sr-only"></span>
+				</div>
+			</div>
+			<div class="row">
+		<div style="flex-basis: 100%;height: 100px;">
+			<div class="py-5 d-none" id="delay15Seconds">
+				<h3 class="mb-4">Process could take up to 5 minutes. Please wait.</h3>
+			</div>
+		</div>
+			</div> <!-- break -->
+		</div>
 	</div>
+
 	<!-- RNA Hybrid result -->
 	<div class="overlay w-100 h-100 px-3" id="rnaHybridResult">
 		<button class="btn btn-secondary float-right text-gray px-3" style="font-size: 24px!important;" id="closeRnaHybrid">X</button>
