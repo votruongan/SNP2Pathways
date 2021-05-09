@@ -11,7 +11,7 @@ function readLines(path){
 }
 
 const connectLines = readLines("./open_proxy.txt");
-
+let ableToUseLocalConnect = true;
 async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy=false){
     console.log(customOptions);
     if (isOnWarning){
@@ -33,7 +33,7 @@ async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy
         port: parseInt(prox[1]),
         path: fullPath,
         method: customOptions.method || 'POST',
-        timeout: 5000,
+        timeout: 10000,
         headers: {
           Host: hostName,
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -73,7 +73,6 @@ async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy
     myReq.write(customOptions.postData);
     myReq.end();
 }
-
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
