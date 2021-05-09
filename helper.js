@@ -34,18 +34,20 @@ async function makeRequest(customOptions,dataCallback,endCallback,shouldUseProxy
         setTimeout(() => { ableToUseLocalConnect = true }, 5*60*1000)
         options = customOptions;
     }
-    else options = {
-        hostname: prox[0],
-        port: parseInt(prox[1]),
-        path: fullPath,
-        method: customOptions.method || 'POST',
-        timeout: 10000,
-        headers: {
-          Host: hostName,
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(customOptions.postData)
-        }
-    };
+    else {
+            options = {
+            hostname: prox[0],
+            port: parseInt(prox[1]),
+            path: fullPath,
+            method: customOptions.method || 'POST',
+            timeout: 10000,
+            headers: {
+            Host: hostName,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(customOptions.postData)
+            }
+        };
+    }
     const myReq = http.request(options, (res) => {
         console.log(`IP: ${prox[0]}STATUS: ${res.statusCode}`);
         // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
