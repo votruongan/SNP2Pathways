@@ -16,14 +16,13 @@ function getValue(str){
 async function parseMirdbNew(data, sequence,elementCallback=null){
     const allLines = data.split("\n");
     console.log("parsing result for sequence",sequence,"- element's callback:",elementCallback);
-    let rank,score,gene,gId,gLink;
     let ranking  = 1;
     const arr = [];
     for (let i = 0; i < allLines.length; i++) {
         const ele = allLines[i];
         const obj = {};
         if (ele.includes('action="/cgi-bin/custom_predict/customDetail.cgi"')){
-            const shorts = allLines[i+1].split('input type="hidden"');
+            const shorts = allLines[i].split('input type="hidden"');
             obj.rank = ranking++;
             obj.score = getValue(shorts[1]);
             obj.gId = getValue(shorts[3]);
