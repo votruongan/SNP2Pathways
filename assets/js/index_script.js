@@ -503,7 +503,7 @@ async function targetExpression(mValue, cellIndexValue, cellLine){
     const url = `/expression/${mValue}/${cellIndexValue}`
     setObjectVisiblity(loadingPanel,true,"d-flex");
     let r = await (await fetch(url)).text()
-    console.log(r)
+    // console.log(r)
     expressResultCellLineName.innerText = "Choosed cell line: " + r.split("with expression level >=1 in cell line ")[1].split(".")[0];
     r = r.split("</table>")
     r.splice(0,2)
