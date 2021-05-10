@@ -22,7 +22,7 @@ const allProxys = fs.readFileSync("./open_proxy.txt", {encoding:"utf-8"}).split(
 async function test (){
     for (let i = 0; i < allProxys.length; i++){
         // const proxy = "http://" + allProxys[i]
-        const proxy = "http://51.158.123.35:9999"
+        const proxy = "http://141.226.18.206:8080"
         request({
             proxy,
             url: "https://api.myip.com",
