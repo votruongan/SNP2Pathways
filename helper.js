@@ -1,6 +1,5 @@
 const http = require('http');
 const fs = require('fs');
-const _ = require('lodash');
 
 let dirtyProxyCount = 0; 
 let isRequesting = 0;
