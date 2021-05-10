@@ -104,7 +104,7 @@ const request = require("request")
 
 app.get('/expression/:mir/:index', async (req, res)=>{
     const{mir, index} = req.params;
-    const url = `http://www.mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${mir}&searchBox=${index}`;
+    const url = `http://mirdb.org/cgi-bin/expression.cgi?searchType=expression&mir=hsa-miR-${mir}&searchBox=${index}`;
     request(url,(_,data,__)=>{ return res.send(data.body) });
 })
 
