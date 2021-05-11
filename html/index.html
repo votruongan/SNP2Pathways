@@ -20,17 +20,16 @@
 		<!-- miRNA input -->
 				<!-- <p class="pl-2">Input:</p> -->
 				<div class="row px-4 align-items-center mb-2">
-					<select class="form-control col-3 text-left ml-2 px-1" name="cars" id="miRNAHeader">
+					<select class="form-control col-4 text-left px-1" name="cars" id="miRNAHeader">
 						<option value="hsa-miR-">hsa-miR-</option>
 						<option value="MIMAT">MIMAT</option>
 					</select>
-					<input type="text" class="p-2 col-4 form-control mr-4" id="miRNA"></input>
-					<button class="p-0 text-white col-4 form-control btn-primary" id="miRNA" onclick="gotoTargetExpression();" style="font-size: 1rem">Target Expression</button>
+					<input type="text" class="p-2 col-7 form-control mr-4" id="miRNA"></input>
 				</div>
 		<!-- choose RS ID -->
 			<div class="row px-4 d-flex align-items-center mb-2">
-				<p class="col-3 d-flex pr-0 m-0 justify-content-end">Ref.SNP ID:</p>
-				<div class="p-0 col-8 w-100 ml-2">
+				<p class="col-4 d-flex pr-0 m-0">Ref.SNP ID:</p>
+				<div class="p-0 col-7 w-100">
 					<input type="text" class="w-100 form-control" id="rsid"></input>
 					<div class="w-100 autocomplete_result"  style="display: none;" id="rsid_suggestions"></div>
 				</div>
@@ -38,10 +37,16 @@
 				
 		<!-- choose Alterrnate type --> 
 			<div class="row px-4 d-flex align-items-center mb-2">
-				<p class="col-3 d-flex m-0 pr-0 justify-content-end">Alternate:</p>
-				<select class="form-control col-8 text-left ml-2" id="alterType">
+				<p class="col-4 d-flex m-0 pr-0">Alternate:</p>
+				<select class="form-control col-7 text-left" id="alterType">
 				</select>
 			</div>
+			</div>
+			<div class="d-flex justify-content-center my-2">
+				<button class="btn btn-danger col-5 px-0 py-2 mr-3" id="miRNA" onclick="gotoTargetExpression();" style="font-size: 1rem">Target Expression</button>
+				<button class="btn btn-primary col-6 px-0 py-2" id="processButton">Target Prediction</button>
+			</div>
+			<div class="shadow py-2">
 		<!-- Choose disease -->
 				<div class="row align-items-center mt-3">
 					<p class="col-5 pl-4 mt-4 mr-0 pr-0">Pathways filter:</p>
@@ -65,7 +70,6 @@
 				</div>
 				
 			</div>
-			<button class="btn btn-primary mt-2 col-12 text-center mb-3" id="processButton"><h4>Process</h4></button>
 			<div class="d-flex justify-content-center">
 				<a class="text-center w-100" href="/about">More info about this site</a></div>
 		</div>
@@ -256,7 +260,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script defer src="js/common.js"></script>
 <script defer src="js/suggest_input.js"></script>
-<script defer src="js/index_script.js"></script>
+<script defer src="js/index_min.js"></script>
 <script defer src="js/rnahybrid_clientside.js"></script>
 </body>
 </html>
