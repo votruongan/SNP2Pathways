@@ -1,6 +1,5 @@
 var request = require('request');
 const {readLines} = require('./helper');
-const { has } = require('lodash');
 const allOfflineKEGG = readLines('./gene_pathways.tsv').map((val) => {return val.split("\t");});
 let hashedMap = {};
 
@@ -86,11 +85,11 @@ async function getKEGGDataOffline(geneId){
         for (let i = 0; i < hashedMap[h].length; i++) {
             const ele = hashedMap[h][i];
             if (ele[0] == geneId){
-                // console.log(ele);
                 res = ele[5].split('&');
                 break;
             }
         }
+        // console.log(res);
         resolve(res);
     });   
 }

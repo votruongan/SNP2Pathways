@@ -158,6 +158,7 @@ function parseDiseaseString(str){
 }
 
 function parseDiseasesInAll(arr){
+    console.log(arr)
     for (let i = 0; i < arr.length; i++) {
         arr[i].diseases = arr[i].diseases.map(val => parseDiseaseString(val));
     }
