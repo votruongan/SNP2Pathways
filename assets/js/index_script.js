@@ -92,7 +92,6 @@ function tableDisplayResult(tableId,arr){
     }
     setGrandParentHeight(tableId,"290px");
     arr = filterDiseasesInArray(arr);
-    console.log(arr[974].diseases);
     for (let i = 0; i < arr.length; i++) {
         var r = makeResultRow(arr[i]);
         tableId.appendChild(r);                
@@ -184,7 +183,10 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,remove
     //check the input param
     if (content == "null" || content == null || content == "")
         return;
-    let data = JSON.parse(content);
+    let data = {};
+    if (typeof content == "string")
+        data = JSON.parse(content);
+    else data = content;
     if (parseDiseases){
         data = parseDiseasesInAll(data);
         result_array[currentIndex] = deepCopyObject(data);
@@ -207,7 +209,6 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,remove
     let resDisplay = deepCopyObject(result_array);
     common_result = [];
     while(i < resDisplay[currentIndex].length){
-        console.log(i)
         const dele = resDisplay[currentIndex][i++];
         for (let j = 0; j < resDisplay[oppositeIndex].length; j++) {
             const rele = resDisplay[oppositeIndex][j];
@@ -259,10 +260,10 @@ function toggleRemoveSimilarGene(){
     setObjectVisiblity(loadingPanel,true,"d-flex");
     btnToggleRemove.innerText = (isRemoveSimilar)?("Keep same target genes"):("Remove same target genes");
     resetResultDisplay();
-    if (raw_result[0].length > 0)
-        setAlenC(JSON.stringify(raw_result[0]),false,isRemoveSimilar);
-    if (raw_result[1].length > 0)
-        setAlenG(JSON.stringify(raw_result[1]),false,isRemoveSimilar);
+    if (result_array[0].length > 0)
+        setAlenC(result_array[0],false,isRemoveSimilar);
+    if (result_array[1].length > 0)
+        setAlenG(result_array[1],false,isRemoveSimilar);
 }
 
 let notiTimeHandle = null;
