@@ -183,10 +183,7 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,remove
     //check the input param
     if (content == "null" || content == null || content == "")
         return;
-    let data = {};
-    if (typeof content == "string")
-        data = JSON.parse(content);
-    else data = content;
+    let data = (typeof content == "string") ? JSON.parse(content) : content;
     if (parseDiseases){
         data = parseDiseasesInAll(data);
         result_array[currentIndex] = deepCopyObject(data);
@@ -259,7 +256,6 @@ function toggleRemoveSimilarGene(){
     isRemoveSimilar = !isRemoveSimilar;
     setObjectVisiblity(loadingPanel,true,"d-flex");
     btnToggleRemove.innerText = (isRemoveSimilar)?("Keep same target genes"):("Remove same target genes");
-    resetResultDisplay();
     if (result_array[0].length > 0)
         setAlenC(result_array[0],false,isRemoveSimilar);
     if (result_array[1].length > 0)
@@ -404,10 +400,10 @@ function applyPathwayFilter(display=true){
     if (display == false){
         return;
     }
-    if (raw_result[0].length > 0)
-        setAlenC(JSON.stringify(raw_result[0]));
-    if (raw_result[1].length > 0)
-        setAlenG(JSON.stringify(raw_result[1]));
+    if (result_array[0].length > 0)
+        setAlenC(result_array[0]);
+    if (result_array[1].length > 0)
+        setAlenG(result_array[1]);
 }
 
 
