@@ -103,7 +103,6 @@ function tableDisplayResult(tableId,arr){
 
 function filterDiseasesInArray(objArray){
     let data = deepCopyObject(objArray);
-    console.log(pathway_filter)
     for (let i = 0; i < data.length; i++) {
         const ele = data[i];
         if (ele.diseases == undefined) continue;
