@@ -20,7 +20,6 @@ function toggleHandler(ch,seq){
     if(alenResHandler[index] == null){
         alenResHandler[index] = setInterval(()=>{
             let sxhr = makeXHR("result",seq);
-            console.log(">>>",ch,xhr);
             if (ch == "C")
                 sxhr.addEventListener("load",function(){setAlenC(this.responseText,true)});
             else
@@ -93,18 +92,21 @@ function tableDisplayResult(tableId,arr){
     }
     setGrandParentHeight(tableId,"290px");
     arr = filterDiseasesInArray(arr);
+    console.log(arr[974].diseases);
     for (let i = 0; i < arr.length; i++) {
         var r = makeResultRow(arr[i]);
         tableId.appendChild(r);                
     }
 }
 
+
+
 function filterDiseasesInArray(objArray){
-    let data = objArray;
+    let data = deepCopyObject(objArray);
+    console.log(pathway_filter)
     for (let i = 0; i < data.length; i++) {
         const ele = data[i];
-        if (ele.diseases == undefined)
-            continue;
+        if (ele.diseases == undefined) continue;
         let j = 0;
         while(j < ele.diseases.length){
             const dele = ele.diseases[j++];
@@ -158,9 +160,9 @@ function parseDiseaseString(str){
 }
 
 function parseDiseasesInAll(arr){
-    console.log(arr)
     for (let i = 0; i < arr.length; i++) {
         arr[i].diseases = arr[i].diseases.map(val => parseDiseaseString(val));
+        // if (arr[i].diseases[0]) console.log(arr[i].diseases[0])
     }
     return arr;
 }
@@ -170,25 +172,28 @@ function setAlenTableHeight(height){
     setGrandParentHeight(alenC_result,height);
 }
 
+function deepCopyObject(obj){
+    return JSON.parse(JSON.stringify(obj))
+}
+
 function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,removeSimilar=false){
     const oppositeIndex = (currentIndex == 1)?(0):(1);
+    //clear res handler
     clearInterval(alenResHandler[currentIndex]);
     alenResHandler[currentIndex]= null;
     resultDisplayer.innerHTML = "<th><td></td><td>No result</td></th>";
+    //check the input param
     if (content == "null" || content == null || content == "")
         return;
     let data = JSON.parse(content);
-    console.log(data);
     if (parseDiseases){
         data = parseDiseasesInAll(data);
-        raw_result[currentIndex] = JSON.parse(JSON.stringify(data));
-        console.log(raw_result[currentIndex]);
+        result_array[currentIndex] = deepCopyObject(data);
     }
     if (data.length > 0)
         resultDisplayer.textContent = "";
     if (isResolveForMIMAT){
         console.log('isResolveForMIMAT')
-        result_array[currentIndex] = data;
         tableDisplayResult(alenC_result,data);
         clearTimeout(notiTimeHandle);
         setObjectVisiblity(loadingPanel, false, "d-flex");
@@ -197,30 +202,28 @@ function setAlenResult(content,resultDisplayer,currentIndex,parseDiseases,remove
         setObjectVisiblity(delay15Seconds,false);
         return;
     }
-    if (result_array[oppositeIndex].length <= 0){
-        result_array[currentIndex] = data;
-        return;
-    }
+    if (result_array[oppositeIndex].length <= 0) return; // have just retrieve 1 side -> return to wait for other side
     setObjectVisiblity(btnToggleRemove,true);
     let i = 0;
+    let resDisplay = deepCopyObject(result_array);
     common_result = [];
-    while(i < data.length){
-        const dele = data[i++];
-        for (let j = 0; j < result_array[oppositeIndex].length; j++) {
-            const rele = result_array[oppositeIndex][j];
-            if (dele.gene == rele.gene){
+    while(i < resDisplay[currentIndex].length){
+        console.log(i)
+        const dele = resDisplay[currentIndex][i++];
+        for (let j = 0; j < resDisplay[oppositeIndex].length; j++) {
+            const rele = resDisplay[oppositeIndex][j];
+            if (dele.gene == rele.gene && dele.score == rele.score){
                 common_result.push(dele);
                 if (removeSimilar){
-                    result_array[oppositeIndex].splice(j,1);
-                    data.splice(--i,1);
+                    resDisplay[oppositeIndex].splice(j,1);
+                    resDisplay[currentIndex].splice(--i,1);
                 }
                 break;
             }
-        }           
+        }
     }
-    result_array[currentIndex] = data;
-    tableDisplayResult(alenC_result,result_array[0]);
-    tableDisplayResult(alenG_result,result_array[1]);
+    tableDisplayResult(alenC_result,resDisplay[0]);
+    tableDisplayResult(alenG_result,resDisplay[1]);
     tableDisplayResult(common_result_display,common_result);
     if (result_array[0].length + result_array[1].length == 0){
         setGrandParentHeight(common_result_display,"450px");
@@ -265,34 +268,47 @@ function toggleRemoveSimilarGene(){
 
 let notiTimeHandle = null;
 
+//have sequence in right panel -> find the different char in sequence and highlight it
+function displayTwoDifferentSequence(obj){
+    function makeBoldChar(char){
+        return `<b style="font-size: 1.3rem">${char}</b>`
+    }
+    let realObj = { alenC: "", alenG: "" }
+    for (let i = 0; i < obj.alenC.length; i++) {
+        if (obj.alenC[i] != obj.alenG[i]){
+            realObj.alenC += makeBoldChar(obj.alenC[i])
+            realObj.alenG += makeBoldChar(obj.alenG[i])
+        } else {
+            realObj.alenC += obj.alenC[i]
+            realObj.alenG += obj.alenG[i]
+        }
+    }
+    return realObj;
+}
+
 function rsReturnProcessor(){
     let obj = JSON.parse(this.responseText);
-    let realObj = JSON.parse(this.responseText);
     console.log(obj);
+    //open timeout panel after 5 minutes
     notiTimeHandle = setTimeout(()=>{
         setObjectVisiblity(loadingPanel,false,"d-flex");
         setObjectVisiblity(notificationPanel,true,"focus");
     },5*60*1000);
-    alenC_display.innerText = realObj.alenC;
+    //reset result display
+    alenC_display.innerText = obj.alenC;
     alenC_result.textContent = '';
     alenG_result.textContent = '';
     common_result_display.textContent = '';
+    //clear res handlers
     alenResHandler.forEach(ele => ele && clearInterval(ele));
     alenResHandler = [null,null];
     applyPathwayFilter(false);
+    //display sequence in left panel
     toggleHandler("C", obj.alenC);
-    if (!obj.alenG) return;
-    for (let i = 0; i < obj.alenC.length; i++) {
-        if (obj.alenC[i] != obj.alenG[i]){
-            console.log("different in index ",i);
-            realObj.alenC = obj.alenC.slice(0,(i-1 < 0)?(0):(i-1))
-            + `<b style="font-size: 1.3rem">${obj.alenC[i]}</b>` + obj.alenC.slice(i+1);
-            realObj.alenG = obj.alenG.slice(0,(i-1 < 0)?(0):(i-1)) 
-            + `<b style="font-size: 1.3rem">${obj.alenG[i]}</b>` + obj.alenG.slice(i+1);
-        }
-    }
-    alenC_display.innerHTML = realObj.alenC;
-    alenG_display.innerHTML = realObj.alenG;
+    if (!obj.alenG) return; //no sequence in right panel -> no further process needed
+    let displayObj = displayTwoDifferentSequence(obj);
+    alenC_display.innerHTML = displayObj.alenC;
+    alenG_display.innerHTML = displayObj.alenG;
     toggleHandler("G", obj.alenG);
 }
 
@@ -382,7 +398,7 @@ function applyPathwayFilter(display=true){
     for (let i = 0; i < all_pathway_filter.length; i++) {
         const res = getEle("path_select_"+i).checked;
         if (res == true){//(res == false || res == null){
-            pathway_filter.push(all_pathway_filter[i]); 
+            pathway_filter.push(all_pathway_filter[i].split('\t')[0]); 
         }
     }
     if (display == false){
