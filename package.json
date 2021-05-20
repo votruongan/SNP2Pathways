@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "packages for funcmirsnp",
   "main": "server.js",
+  "private":"true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "chmod 777 rnaHybrid/RNAhybrid && chmod 777 rnaHybrid/three_prime_utrs_fastas && chmod 777 rnaHybrid/mirna_rs_sequence_fastas",

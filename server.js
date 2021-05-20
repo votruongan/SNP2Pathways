@@ -17,10 +17,10 @@ app.use(express.static(__dirname + '/assets/'));
 const reqMonitor = [];
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/html/index.html');
+    res.sendFile(__dirname + '/dist/index.html');
 })
 app.get('/about', function(req, res){
-    res.sendFile(__dirname + '/html/about.html');
+    res.sendFile(__dirname + '/dist/about.html');
 })
 
 function sequenceToResultId(seq){
