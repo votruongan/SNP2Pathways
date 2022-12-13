@@ -10,7 +10,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jsdom": "^16.2.2",
     "lodash": "^4.17.20",
     "serve-favicon": "^2.5.0"
